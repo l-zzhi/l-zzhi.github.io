@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简易性格测试</title>
+    <style>
+        /* CSS 样式：控制页面的外观 */
+        body {
+            font-family: 'PingFang SC', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .options label {
+            display: block;
+            background-color: #f9f9f9;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border: 1px solid #eee;
+        }
+
+        .options label:hover {
+            background-color: #e3f2fd;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        /* 当选项被选中时的样式 */
+        .options input[type="radio"]:checked + span {
+            font-weight: bold;
+            color: #1976d2;
+        }
+
+        #submit-btn {
+            display: block;
+            width: 200px;
+            margin: 30px auto 0;
+            padding: 12px;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #submit-btn:hover {
+            background-color: #1565c0;
+        }
+
+        #result-area {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e8f5e9;
+            border-radius: 8px;
+            border: 1px solid #c8e6c9;
+            display: none; /* 初始隐藏 */
+            text-align: center;
+        }
+
+        #result-title {
+            color: #2e7d32;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>简易性格测试</h1>
+    
+    <form id="quiz-form">
+        <div id="quiz-content"></div>
+        
+        <button type="button" id="submit-btn" onclick="calculateResult()">查看我的测试结果</button>
+    </form>
+
+    <div id="result-area">
+        <div id="result-title">你的测试结果</div>
+        <div id="result-text"></div>
+    </div>
+</div>
+
+<script>
+    // JS 数据：包含题目和选项
+    const questions = [
+        { q: "1. 在周末，你通常更喜欢如何度过？", a: "参加热闹的聚会，和朋友们在一起。", b: "宅在家里看书、看电影或休息。", c: "进行一些户外运动或独自发展的小爱好。" },
+        { q: "2. 当面临一个突发问题时，你的第一反应是：", a: "迅速分析逻辑，寻找最有效的解决方案。", b: "关注这个问题对他人的情感影响。", c: "感到有些压力，倾向于先观察一下局势。" },
+        { q: "3. 在团队合作中，你通常扮演什么样的角色？", a: "负责指挥和决策的领导者。", b: "踏实肯干、完成具体任务的执行者。", c: "协调人际关系、缓解矛盾的调解员。" },
+        { q: "4. 进入一个陌生的社交环境时，你会：", a: "主动找人聊天，很快就能结交新朋友。", b: "保持沉默，直到有人主动和你打招呼。", c: "先观察环境，只和看起来比较友善的人交流。" },
+        { q: "5. 你做决定时的习惯是：", a: "果断干脆，相信自己的第一直觉。", b: "反复权衡利弊，收集尽可能多的信息后再定夺。", c: "很难下定决心，常常想听听身边人的建议。" },
+        { q: "6. 当你和别人发生意见分歧时，你会：", a: "坚持自己的观点，直到说服对方。", b: "寻求折中方案，大家都退让一步。", c: "避免正面争吵，甚至可能为了和谐而妥协。" },
+        { q: "7. 你的办公桌或房间通常呈现什么状态？", a: "东西很多，但你自己知道每样东西在哪（乱中有序）。", b: "非常整洁，所有物品都摆放得井井有条。", c: "极简风格，桌面上只保留最必要的物品。" },
+        { q: "8. 你更看重事物的哪一个方面？", a: "宏观的愿景和未来的各种可能性。", b: "具体的细节和目前的实际执行情况。", c: "它的实用价值和能带来的即时效果。" },
+        { q: "9. 在压力很大的情况下，你的表现通常是：", a: "变得非常高效，压力反而让你更有斗志。", b: "感到焦虑和疲惫，工作效率明显下降。", c: "试图保持冷静，按部就班地尝试处理。" },
+        { q: "10. 关于人生目标，你的态度倾向于：", a: "制定详细的长期计划，并为了实现它而努力。", b: "设立短期可行的目标，走好当下的每一步。", c: "顺其自然，更看重享受当下的生活状态。" }
+    ];
+
+    // JS 逻辑：结果分析描述
+    const resultsData = {
+        A: { title: "“行动派领导者”", text: "你是一个果断干脆、充满活力的人。你喜欢掌控局势，能够迅速做出决定，并在压力下表现出很强的执行力。你更看重未来的可能性，是个天生的领导者，但有时可能需要多听听他人的意见。" },
+        B: { title: "“谨慎派专家”", text: "你是一个心思细腻、注重逻辑和细节的人。你做决定前喜欢收集足够的信息，反复权衡利弊。你享受独处和思考，是个踏实的执行者。你对自己和环境有很高的要求，但有时可能因为想得太多而犹豫不决。" },
+        C: { title: "“随和派协调者”", text: "你是一个平和、友善且懂得享受当下的人。你善于协调人际关系，避免冲突，是团队中的“润滑剂”。你更看重事物的实用价值和眼前的快乐，倾向于顺其自然。你让人感到舒服，但有时可能需要更坚定地表达自己的需求。" }
+    };
+
+    // 1. 动态生成题目 HTML
+    function renderQuiz() {
+        const quizContent = document.getElementById('quiz-content');
+        let html = '';
+        questions.forEach((item, index) => {
+            html += `
+                <div class="question">
+                    <span class="question-text">${item.q}</span>
+                    <div class="options">
+                        <label><input type="radio" name="q${index}" value="A"> <span>A) ${item.a}</span></label>
+                        <label><input type="radio" name="q${index}" value="B"> <span>B) ${item.b}</span></label>
+                        <label><input type="radio" name="q${index}" value="C"> <span>C) ${item.c}</span></label>
+                    </div>
+                </div>
+            `;
+        });
+        quizContent.innerHTML = html;
+    }
+
+    // 2. 计算并显示结果
+    function calculateResult() {
+        const form = document.getElementById('quiz-form');
+        const formData = new FormData(form);
+        let scores = { A: 0, B: 0, C: 0 };
+        let answeredCount = 0;
+
+        // 统计分数
+        for (let i = 0; i < questions.length; i++) {
+            const answer = formData.get(`q${i}`);
+            if (answer) {
+                scores[answer]++;
+                answeredCount++;
+            }
+        }
+
+        // 检查是否所有题目都回答了
+        if (answeredCount < questions.length) {
+            alert("请回答完所有 10 道题目后再查看结果。");
+            return;
+        }
+
+        // 找到得分最高的选项 (简单的最高分逻辑)
+        let maxScore = -1;
+        let finalType = '';
+        for (const type in scores) {
+            if (scores[type] > maxScore) {
+                maxScore = scores[type];
+                finalType = type;
+            }
+        }
+
+        // 显示结果区域
+        const resultArea = document.getElementById('result-area');
+        const resultTitle = document.getElementById('result-title');
+        const resultText = document.getElementById('result-text');
+
+        resultTitle.innerText = `你的性格类型：${resultsData[finalType].title}`;
+        resultText.innerText = resultsData[finalType].text;
+        resultArea.style.display = 'block';
+
+        // 滚动到结果区域
+        resultArea.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 页面加载完成时初始化测试
+    window.onload = renderQuiz;
+</script>
+
+</body>
+</html>
