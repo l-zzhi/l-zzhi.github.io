@@ -12,8 +12,29 @@
             font-family: system-ui, 'Segoe UI', 'Helvetica Neue', 'Noto Sans', sans-serif;
         }
         body {
-        background: url('https://s41.ax1x.com/2026/04/21/peg5TqU.jpg') center/cover no-repeat fixed #fad4e4;
-          
+            body {
+    /* 使用你提供的图片链接作为背景 */
+    background-image: url('https://s41.ax1x.com/2026/04/21/peg5TqU.jpg');
+    
+    /* 确保图片覆盖整个屏幕，不留白边 */
+    background-size: cover;
+    
+    /* 图片居中显示 */
+    background-position: center;
+    
+    /* 背景图固定，页面滚动时不会移动 */
+    background-attachment: fixed;
+    
+    /* 如果图片加载失败，显示一个柔和的粉色作为后备 */
+    background-color: #fad4e4;
+    
+    /* 以下是原有的其他样式，保持不变 */
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
         }
         .test-container {
             max-width: 760px;
@@ -579,6 +600,79 @@
             let start = -Math.PI/2;
             ctx.clearRect(0,0,240,240);
             topTags.forEach((tag, i) => {
+                const angle = (tag[1]/total) * 2 * Math.PI;
+                ctx.beginPath();
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.moveTo(120,120);
+                ctx.arc(120,120,100, start, start+angle);
+                ctx.closePath();
+                ctx.fill();
+                start += angle;
+            });
+            ctx.beginPath();
+            ctx.fillStyle = '#fff0f5';
+            ctx.arc(120,120,55,0,2*Math.PI);
+            ctx.fill();
+        }
+
+        function showResult() {
+            if (answers.some(a => a === null)) {
+                alert('请完成所有题目后再查看结果～');
+                const idx = answers.findIndex(a => a === null);
+                if (idx !== -1) goToPage(idx);
+                return;
+            }
+            const sorted = calculateScores();
+            const top3 = sorted.slice(0,3);
+            drawPieChart(top3);
+            
+            const legend = document.getElementById('legendArea');
+            const colors = ['#e8749a', '#f6a5c1', '#fbc1d4'];
+            legend.innerHTML = top3.map((t,i) => {
+                const pct = ((t[1] / top3.reduce((s,x)=>s+x[1],0))*100).toFixed(1);
+                return `<div class="legend-item"><span class="color-dot" style="background:${colors[i]}"></span> ${t[0]} ${pct}%</div>`;
+            }).join('');
+            
+            const descBox = document.getElementById('typeDescriptions');
+            descBox.innerHTML = top3.map(t => {
+                const info = typeDescriptions[t[0]] || { name:t[0], quote:"独一无二", desc:"每一种喜欢都值得珍惜。" };
+                return `<div class="type-card"><div class="type-name">${info.name}</div>
+                    <div class="type-quote">“${info.quote}”</div>
+                    <div class="type-desc">${info.desc}</div></div>`;
+            }).join('');
+            
+            quizSection.style.display = 'none';
+            resultSection.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function backToQuiz() {
+            resultSection.style.display = 'none';
+            quizSection.style.display = 'block';
+            renderQuestion(currentIndex);
+        }
+
+        function resetAll() {
+            if (confirm('重新开始？进度会丢失。')) {
+                answers = new Array(totalQ).fill(null);
+                currentIndex = 0;
+                quizSection.style.display = 'block';
+                resultSection.style.display = 'none';
+                renderQuestion(0);
+            }
+        }
+
+        prevBtn.addEventListener('click', () => { if (currentIndex>0) goToPage(currentIndex-1); });
+        nextBtn.addEventListener('click', () => { if (currentIndex<totalQ-1) goToPage(currentIndex+1); });
+        submitBtn.addEventListener('click', showResult);
+        resetBtn.addEventListener('click', resetAll);
+        backBtn.addEventListener('click', backToQuiz);
+        
+        renderQuestion(0);
+    })();
+</script>
+</body>
+</html>
                 const angle = (tag[1]/total) * 2 * Math.PI;
                 ctx.beginPath();
                 ctx.fillStyle = colors[i % colors.length];
