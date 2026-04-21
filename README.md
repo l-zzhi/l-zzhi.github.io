@@ -12,40 +12,29 @@
             font-family: system-ui, 'Segoe UI', 'Helvetica Neue', 'Noto Sans', sans-serif;
         }
         body {
-            body {
-    /* 使用你提供的图片链接作为背景 */
-    background-image: url('https://s41.ax1x.com/2026/04/21/peg5TqU.jpg');
-    
-    /* 确保图片覆盖整个屏幕，不留白边 */
-    background-size: cover;
-    
-    /* 图片居中显示 */
-    background-position: center;
-    
-    /* 背景图固定，页面滚动时不会移动 */
-    background-attachment: fixed;
-    
-    /* 如果图片加载失败，显示一个柔和的粉色作为后备 */
-    background-color: #fad4e4;
-    
-    /* 以下是原有的其他样式，保持不变 */
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-}
+            /* 背景图片 (您的图片) */
+            background-image: url('https://s41.ax1x.com/2026/04/21/peg5TqU.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #fad4e4;  /* 后备粉色 */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
         }
+        /* 主卡片 —— 大幅提高透明度，让背景图透出更清晰 */
         .test-container {
             max-width: 760px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.2);       /* 原为0.85，改为0.2 */
+            backdrop-filter: blur(12px);                 /* 增强毛玻璃 */
+            -webkit-backdrop-filter: blur(12px);
             border-radius: 36px;
-            box-shadow: 0 20px 40px -8px rgba(180, 80, 120, 0.2);
+            box-shadow: 0 20px 40px -8px rgba(180, 80, 120, 0.25);
             padding: 28px 24px;
-            border: 1px solid rgba(255, 220, 230, 0.8);
+            border: 1px solid rgba(255, 220, 230, 0.5);
         }
         h1 {
             display: flex;
@@ -56,7 +45,7 @@
             color: #832a4c;
             margin-bottom: 8px;
             padding-bottom: 16px;
-            border-bottom: 2px solid #fbb6ce;
+            border-bottom: 2px solid rgba(251, 182, 206, 0.7);
         }
         h1 small {
             font-size: 1rem;
@@ -72,15 +61,16 @@
         .progress-label {
             font-weight: 600;
             color: #832a4c;
-            background: #ffe0eb;
+            background: rgba(255, 224, 235, 0.6);
             padding: 5px 16px;
             border-radius: 30px;
             font-size: 0.9rem;
+            backdrop-filter: blur(4px);
         }
         .progress-track {
             flex: 1;
             height: 8px;
-            background: #fbc4d6;
+            background: rgba(251, 196, 214, 0.6);
             border-radius: 20px;
             overflow: hidden;
         }
@@ -91,14 +81,16 @@
             border-radius: 20px;
             transition: width 0.25s;
         }
-        /* 题目卡片 */
+        /* 题目卡片 —— 同样更透明 */
         .question-card {
-            background: #fff0f5;
+            background: rgba(255, 240, 245, 0.35);      /* 原0.35左右，保持透感 */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border-radius: 32px;
             padding: 28px 24px;
             margin: 16px 0 24px;
-            box-shadow: inset 0 0 0 1px rgba(255,240,245,0.9), 0 8px 18px -6px rgba(180, 60, 100, 0.15);
-            border: 1px solid #fbc1d4;
+            box-shadow: 0 8px 18px -6px rgba(180, 60, 100, 0.15);
+            border: 1px solid rgba(251, 193, 212, 0.6);
         }
         .q-header {
             display: flex;
@@ -117,7 +109,7 @@
             justify-content: center;
             border-radius: 30px;
             font-size: 1.2rem;
-            box-shadow: 0 4px 6px rgba(200, 70, 110, 0.2);
+            box-shadow: 0 4px 6px rgba(200, 70, 110, 0.3);
         }
         .q-text {
             font-size: 1.45rem;
@@ -125,6 +117,7 @@
             line-height: 1.35;
             color: #63203a;
             flex: 1;
+            text-shadow: 0 1px 3px rgba(255,255,255,0.5);
         }
         .options-list {
             display: flex;
@@ -134,16 +127,18 @@
         .option-item {
             display: flex;
             align-items: flex-start;
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             border-radius: 24px;
             padding: 16px 20px;
-            border: 1.5px solid #fbb6ce;
+            border: 1.5px solid rgba(251, 182, 206, 0.8);
             box-shadow: 0 3px 0 #e9a5bc;
             cursor: pointer;
             transition: all 0.15s;
         }
         .option-item.selected {
-            background: #fde3ec;
+            background: rgba(253, 227, 236, 0.9);
             border-color: #d45c86;
             box-shadow: 0 3px 0 #bc4e76;
         }
@@ -178,6 +173,7 @@
             color: #4a2233;
             flex: 1;
             line-height: 1.4;
+            font-weight: 500;
         }
         .nav-row {
             display: flex;
@@ -186,7 +182,8 @@
             margin-top: 8px;
         }
         .nav-btn {
-            background: #ffe0eb;
+            background: rgba(255, 224, 235, 0.8);
+            backdrop-filter: blur(4px);
             border: none;
             padding: 12px 28px;
             border-radius: 50px;
@@ -196,7 +193,7 @@
             box-shadow: 0 4px 0 #e9a5bc;
             cursor: pointer;
             transition: 0.1s;
-            border: 1px solid #fbc1d4;
+            border: 1px solid rgba(251, 193, 212, 0.8);
             min-width: 120px;
         }
         .nav-btn:disabled {
@@ -206,7 +203,7 @@
             pointer-events: none;
         }
         .nav-btn:hover:not(:disabled) {
-            background: #fbc4d6;
+            background: rgba(251, 196, 214, 0.9);
             transform: translateY(-1px);
             box-shadow: 0 5px 0 #d989a8;
         }
@@ -241,14 +238,16 @@
             gap: 20px;
             margin: 20px 0 8px;
         }
-        /* 结果面板 (独立页) */
+        /* 结果面板 —— 同样提高透明度 */
         .result-panel {
             margin-top: 10px;
-            background: #fff0f5;
+            background: rgba(255, 240, 245, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-radius: 32px;
             padding: 28px 24px;
             border-left: 8px solid #d45c86;
-            box-shadow: 0 8px 20px -6px rgba(180, 60, 100, 0.15);
+            box-shadow: 0 8px 20px -6px rgba(180, 60, 100, 0.2);
         }
         .result-title {
             font-size: 1.9rem;
@@ -256,6 +255,7 @@
             color: #63203a;
             margin-bottom: 20px;
             text-align: center;
+            text-shadow: 0 1px 4px rgba(255,255,255,0.6);
         }
         .chart-container {
             display: flex;
@@ -266,6 +266,7 @@
             max-width: 240px;
             width: 100%;
             height: auto;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
         }
         .legend-area {
             display: flex;
@@ -278,7 +279,8 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(4px);
             padding: 5px 18px;
             border-radius: 40px;
             box-shadow: 0 2px 6px rgba(200,80,120,0.1);
@@ -292,12 +294,13 @@
             margin-top: 20px;
         }
         .type-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
             border-radius: 24px;
             padding: 18px 20px;
             margin-bottom: 16px;
-            box-shadow: 0 3px 10px rgba(190, 80, 120, 0.08);
-            border: 1px solid #fbc1d4;
+            box-shadow: 0 3px 10px rgba(190, 80, 120, 0.1);
+            border: 1px solid rgba(251, 193, 212, 0.7);
         }
         .type-name {
             font-size: 1.5rem;
@@ -321,6 +324,10 @@
             color: #b95c7c;
             text-align: center;
             margin-top: 24px;
+            background: rgba(255,255,240,0.3);
+            padding: 6px 12px;
+            border-radius: 40px;
+            backdrop-filter: blur(4px);
         }
         .hidden {
             display: none;
@@ -358,7 +365,7 @@
         </div>
     </div>
 
-    <!-- 结果展示区域 (独立) -->
+    <!-- 结果展示区域 (独立，已移除返回按钮) -->
     <div id="resultSection" class="result-panel" style="display: none;">
         <div class="result-title" id="resultMainTitle">✨ 你的晟斗士图鉴</div>
         <div class="chart-container">
@@ -366,9 +373,7 @@
         </div>
         <div class="legend-area" id="legendArea"></div>
         <div class="type-desc-box" id="typeDescriptions"></div>
-        <div style="display: flex; justify-content: center; margin-top: 24px;">
-            <button class="nav-btn" id="backToQuizBtn" style="background:white; color:#a13b63;">← 返回修改答案</button>
-        </div>
+        <!-- 已移除返回修改答案按钮 -->
     </div>
     <div class="footer-note">💗 每一份爱都有独特的形状 · 晟斗士图鉴</div>
 </div>
@@ -535,7 +540,6 @@
         const nextBtn = document.getElementById('nextBtn');
         const submitBtn = document.getElementById('submitBtn');
         const resetBtn = document.getElementById('resetBtn');
-        const backBtn = document.getElementById('backToQuizBtn');
         const pageIndicator = document.getElementById('pageIndicator');
         const progressText = document.getElementById('progressText');
         const progressFill = document.getElementById('progressFill');
@@ -646,12 +650,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function backToQuiz() {
-            resultSection.style.display = 'none';
-            quizSection.style.display = 'block';
-            renderQuestion(currentIndex);
-        }
-
         function resetAll() {
             if (confirm('重新开始？进度会丢失。')) {
                 answers = new Array(totalQ).fill(null);
@@ -666,80 +664,6 @@
         nextBtn.addEventListener('click', () => { if (currentIndex<totalQ-1) goToPage(currentIndex+1); });
         submitBtn.addEventListener('click', showResult);
         resetBtn.addEventListener('click', resetAll);
-        backBtn.addEventListener('click', backToQuiz);
-        
-        renderQuestion(0);
-    })();
-</script>
-</body>
-</html>
-                const angle = (tag[1]/total) * 2 * Math.PI;
-                ctx.beginPath();
-                ctx.fillStyle = colors[i % colors.length];
-                ctx.moveTo(120,120);
-                ctx.arc(120,120,100, start, start+angle);
-                ctx.closePath();
-                ctx.fill();
-                start += angle;
-            });
-            ctx.beginPath();
-            ctx.fillStyle = '#fff0f5';
-            ctx.arc(120,120,55,0,2*Math.PI);
-            ctx.fill();
-        }
-
-        function showResult() {
-            if (answers.some(a => a === null)) {
-                alert('请完成所有题目后再查看结果～');
-                const idx = answers.findIndex(a => a === null);
-                if (idx !== -1) goToPage(idx);
-                return;
-            }
-            const sorted = calculateScores();
-            const top3 = sorted.slice(0,3);
-            drawPieChart(top3);
-            
-            const legend = document.getElementById('legendArea');
-            const colors = ['#e8749a', '#f6a5c1', '#fbc1d4'];
-            legend.innerHTML = top3.map((t,i) => {
-                const pct = ((t[1] / top3.reduce((s,x)=>s+x[1],0))*100).toFixed(1);
-                return `<div class="legend-item"><span class="color-dot" style="background:${colors[i]}"></span> ${t[0]} ${pct}%</div>`;
-            }).join('');
-            
-            const descBox = document.getElementById('typeDescriptions');
-            descBox.innerHTML = top3.map(t => {
-                const info = typeDescriptions[t[0]] || { name:t[0], quote:"独一无二", desc:"每一种喜欢都值得珍惜。" };
-                return `<div class="type-card"><div class="type-name">${info.name}</div>
-                    <div class="type-quote">“${info.quote}”</div>
-                    <div class="type-desc">${info.desc}</div></div>`;
-            }).join('');
-            
-            quizSection.style.display = 'none';
-            resultSection.style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function backToQuiz() {
-            resultSection.style.display = 'none';
-            quizSection.style.display = 'block';
-            renderQuestion(currentIndex);
-        }
-
-        function resetAll() {
-            if (confirm('重新开始？进度会丢失。')) {
-                answers = new Array(totalQ).fill(null);
-                currentIndex = 0;
-                quizSection.style.display = 'block';
-                resultSection.style.display = 'none';
-                renderQuestion(0);
-            }
-        }
-
-        prevBtn.addEventListener('click', () => { if (currentIndex>0) goToPage(currentIndex-1); });
-        nextBtn.addEventListener('click', () => { if (currentIndex<totalQ-1) goToPage(currentIndex+1); });
-        submitBtn.addEventListener('click', showResult);
-        resetBtn.addEventListener('click', resetAll);
-        backBtn.addEventListener('click', backToQuiz);
         
         renderQuestion(0);
     })();
