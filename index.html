@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>🌸 测测你是晟斗士中的哪一种 · 粉丝图鉴</title>
+    <!-- html2canvas 库，用于保存图片 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -96,14 +98,15 @@
             font-size: 1rem;
             opacity: 0.8;
         }
+        /* 主测试卡片 —— 提高透明度，背景更清晰 */
         .test-container {
             max-width: 760px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.15);   /* 原0.25改为0.15，更透明 */
             border-radius: 36px;
-            box-shadow: 0 20px 40px -8px rgba(180, 80, 120, 0.2);
+            box-shadow: 0 20px 40px -8px rgba(180, 80, 120, 0.15);
             padding: 28px 24px;
-            border: 1px solid rgba(255, 220, 230, 0.4);
+            border: 1px solid rgba(255, 220, 230, 0.3);
             backdrop-filter: none;
             -webkit-backdrop-filter: none;
         }
@@ -113,7 +116,7 @@
             justify-content: space-between;
             margin-bottom: 8px;
             padding-bottom: 16px;
-            border-bottom: 2px solid rgba(251, 182, 206, 0.6);
+            border-bottom: 2px solid rgba(251, 182, 206, 0.5);
         }
         h1 {
             font-weight: 650;
@@ -129,7 +132,7 @@
             color: #b95c7c;
         }
         .reset-icon {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.3);
             border: none;
             color: #a13b63;
             font-size: 1.4rem;
@@ -140,12 +143,12 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(180,80,120,0.15);
+            box-shadow: 0 2px 8px rgba(180,80,120,0.1);
             transition: 0.15s;
-            border: 1px solid rgba(251, 193, 212, 0.6);
+            border: 1px solid rgba(251, 193, 212, 0.5);
         }
         .reset-icon:hover {
-            background: rgba(251, 196, 214, 0.5);
+            background: rgba(251, 196, 214, 0.4);
             transform: scale(1.05);
         }
         .progress-container {
@@ -157,7 +160,7 @@
         .progress-label {
             font-weight: 600;
             color: #832a4c;
-            background: rgba(255, 224, 235, 0.5);
+            background: rgba(255, 224, 235, 0.4);
             padding: 5px 16px;
             border-radius: 30px;
             font-size: 0.9rem;
@@ -165,7 +168,7 @@
         .progress-track {
             flex: 1;
             height: 8px;
-            background: rgba(251, 196, 214, 0.5);
+            background: rgba(251, 196, 214, 0.4);
             border-radius: 20px;
             overflow: hidden;
         }
@@ -177,12 +180,12 @@
             transition: width 0.25s;
         }
         .question-card {
-            background: rgba(255, 240, 245, 0.3);
+            background: rgba(255, 240, 245, 0.25);
             border-radius: 32px;
             padding: 28px 24px;
             margin: 16px 0 24px;
-            box-shadow: 0 8px 18px -6px rgba(180, 60, 100, 0.1);
-            border: 1px solid rgba(251, 193, 212, 0.5);
+            box-shadow: 0 8px 18px -6px rgba(180, 60, 100, 0.08);
+            border: 1px solid rgba(251, 193, 212, 0.4);
         }
         .q-header {
             display: flex;
@@ -201,7 +204,7 @@
             justify-content: center;
             border-radius: 30px;
             font-size: 1.2rem;
-            box-shadow: 0 4px 6px rgba(200, 70, 110, 0.3);
+            box-shadow: 0 4px 6px rgba(200, 70, 110, 0.25);
         }
         .q-text {
             font-size: 1.45rem;
@@ -209,7 +212,7 @@
             line-height: 1.35;
             color: #63203a;
             flex: 1;
-            text-shadow: 0 1px 3px rgba(255,255,255,0.4);
+            text-shadow: 0 1px 3px rgba(255,255,255,0.3);
         }
         .options-list {
             display: flex;
@@ -219,17 +222,17 @@
         .option-item {
             display: flex;
             align-items: flex-start;
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.35);
             border-radius: 24px;
             padding: 16px 20px;
-            border: 1.5px solid rgba(251, 182, 206, 0.7);
-            box-shadow: 0 3px 0 rgba(233, 165, 188, 0.5);
+            border: 1.5px solid rgba(251, 182, 206, 0.6);
+            box-shadow: 0 3px 0 rgba(233, 165, 188, 0.4);
             cursor: pointer;
             transition: all 0.15s;
             backdrop-filter: none;
         }
         .option-item.selected {
-            background: rgba(253, 227, 236, 0.7);
+            background: rgba(253, 227, 236, 0.65);
             border-color: #d45c86;
             box-shadow: 0 3px 0 #bc4e76;
         }
@@ -273,7 +276,7 @@
             margin-top: 8px;
         }
         .nav-btn {
-            background: rgba(255, 224, 235, 0.6);
+            background: rgba(255, 224, 235, 0.5);
             border: none;
             padding: 12px 28px;
             border-radius: 50px;
@@ -283,7 +286,7 @@
             box-shadow: 0 4px 0 #e9a5bc;
             cursor: pointer;
             transition: 0.1s;
-            border: 1px solid rgba(251, 193, 212, 0.7);
+            border: 1px solid rgba(251, 193, 212, 0.6);
             min-width: 120px;
         }
         .nav-btn:disabled {
@@ -293,7 +296,7 @@
             pointer-events: none;
         }
         .nav-btn:hover:not(:disabled) {
-            background: rgba(251, 196, 214, 0.8);
+            background: rgba(251, 196, 214, 0.7);
             transform: translateY(-1px);
             box-shadow: 0 5px 0 #d989a8;
         }
@@ -314,22 +317,23 @@
             margin: 20px 0 8px;
         }
         .progress-badge {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.4);
             padding: 10px 32px;
             border-radius: 50px;
             font-weight: 600;
             color: #832a4c;
             font-size: 1.2rem;
             box-shadow: 0 2px 10px rgba(200,80,120,0.1);
-            border: 1px solid rgba(251, 193, 212, 0.6);
+            border: 1px solid rgba(251, 193, 212, 0.5);
         }
+        /* 结果面板 */
         .result-panel {
             margin-top: 10px;
-            background: rgba(255, 240, 245, 0.4);
+            background: rgba(255, 240, 245, 0.35);
             border-radius: 32px;
             padding: 28px 24px;
             border-left: 8px solid #d45c86;
-            box-shadow: 0 8px 20px -6px rgba(180, 60, 100, 0.15);
+            box-shadow: 0 8px 20px -6px rgba(180, 60, 100, 0.1);
         }
         .result-title {
             font-size: 1.9rem;
@@ -341,43 +345,61 @@
         .chart-container {
             display: flex;
             justify-content: center;
-            margin: 10px 0 20px;
+            margin: 10px 0 15px;
         }
         canvas {
-            max-width: 240px;
+            max-width: 220px;
             width: 100%;
             height: auto;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
         }
-        .legend-area {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 18px 30px;
+        /* 横条百分比图区域 */
+        .bar-chart-area {
             margin: 16px 0 10px;
+            padding: 0 8px;
         }
-        .legend-item {
+        .bar-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.6);
-            padding: 5px 18px;
-            border-radius: 40px;
+            gap: 10px;
+            margin-bottom: 12px;
         }
-        .color-dot {
-            width: 18px;
-            height: 18px;
-            border-radius: 18px;
+        .bar-label {
+            width: 70px;
+            font-weight: 600;
+            color: #63203a;
+            font-size: 1rem;
+        }
+        .bar-bg {
+            flex: 1;
+            height: 20px;
+            background: #d48ca6;      /* 较深粉色底色 */
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .bar-fill {
+            height: 100%;
+            width: 0%;
+            background: #fbc1d4;      /* 亮粉色填充 */
+            border-radius: 30px;
+            transition: width 0.3s;
+        }
+        .bar-percent {
+            width: 50px;
+            text-align: right;
+            font-weight: 600;
+            color: #a13b63;
         }
         .type-desc-box {
             margin-top: 20px;
         }
         .type-card {
-            background: rgba(255, 255, 255, 0.55);
+            background: rgba(255, 255, 255, 0.45);
             border-radius: 24px;
             padding: 18px 20px;
             margin-bottom: 16px;
-            border: 1px solid rgba(251, 193, 212, 0.7);
+            border: 1px solid rgba(251, 193, 212, 0.6);
         }
         .type-name {
             font-size: 1.5rem;
@@ -411,6 +433,29 @@
         }
         .type-images img:hover {
             transform: scale(1.02);
+        }
+        .save-btn-container {
+            display: flex;
+            justify-content: center;
+            margin: 24px 0 8px;
+        }
+        .save-btn {
+            background: #a13b63;
+            color: white;
+            border: none;
+            padding: 14px 36px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 0 #6d2a45;
+            cursor: pointer;
+            transition: 0.1s;
+            border: 1px solid #c96b8a;
+        }
+        .save-btn:hover {
+            background: #bc4e76;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0 #6d2a45;
         }
         .footer-note {
             font-size: 0.8rem;
@@ -478,10 +523,14 @@
     <div id="resultSection" class="result-panel" style="display: none;">
         <div class="result-title" id="resultMainTitle">✨ 你的晟斗士图鉴</div>
         <div class="chart-container">
-            <canvas id="resultChart" width="240" height="240"></canvas>
+            <canvas id="resultChart" width="220" height="220"></canvas>
         </div>
-        <div class="legend-area" id="legendArea"></div>
+        <!-- 横条百分比图取代原图例 -->
+        <div class="bar-chart-area" id="barChartArea"></div>
         <div class="type-desc-box" id="typeDescriptions"></div>
+        <div class="save-btn-container">
+            <button class="save-btn" id="saveImageBtn">📸 保存图片</button>
+        </div>
         <div class="disclaimer">测试内容仅供娱乐</div>
     </div>
     <div class="footer-note">💗 每一份爱都有独特的形状 · 晟斗士图鉴</div>
@@ -489,7 +538,7 @@
 
 <script>
     (function(){
-        // 题库（与之前一致）
+        // ---------- 题库（严格按照文档内容，修正错别字） ----------
         const questions = [
             { text: "刚结束疲惫的一天，你最想通过哪种方式“回血”？", options: [
                 { letter: "A", desc: "翻出李晟以前的舞台，舔颜并为李晟超好听的歌声超有魅力的舞台发疯。", tags: ["舞台粉","颜粉","歌手粉"] },
@@ -500,8 +549,8 @@
             { text: "如果要向一个人不了解李晟的人安利她，你会首先选择哪一项？", options: [
                 { letter: "A", desc: "介绍某部剧里很有魅力的角色，精细的演技。", tags: ["安利粉","演员粉","演员粉"] },
                 { letter: "B", desc: "翻出某个采访里你觉得很有道理很哲学的话，让你从中学到/跟你一模一样的部分。", tags: ["访谈粉","访谈粉","安利粉"] },
-                { letter: "C", desc: "令人着迷的颜值，女神好伟大的一张脸", tags: ["安利粉","颜粉","女友粉"] },
-                { letter: "D", desc: "光彩四射的舞台，谁看谁爱上的满分爱豆", tags: ["安利粉","歌手粉","舞台粉"] }
+                { letter: "C", desc: "令人着迷的颜值，女神好伟大的一张脸。", tags: ["安利粉","颜粉","女友粉"] },
+                { letter: "D", desc: "光彩四射的舞台，谁看谁爱上的满分爱豆。", tags: ["安利粉","歌手粉","舞台粉"] }
             ]},
             { text: "晚上躺在床上刷手机，你最可能在干什么？", options: [
                 { letter: "A", desc: "凌晨零点抢超话首签，连签也不能断。", tags: ["数据粉","数据粉","物料粉"] },
@@ -512,8 +561,8 @@
             { text: "她的新剧终于播出了，你的状态是：", options: [
                 { letter: "A", desc: "疯狂截图她的绝美造型，发朋友圈发微博发给朋友猛夸。", tags: ["颜粉","安利粉","颜粉"] },
                 { letter: "B", desc: "专心投入剧情，等结束后马上发长篇剧评夸演技。", tags: ["演员粉","安利粉","演员粉"] },
-                { letter: "C", desc: "追剧进度完全靠刷社交平台，不打开播放器，专门在超话里存别人整理的高清cut和动图", tags: ["物料粉","颜粉","产出粉"] },
-                { letter: "D", desc: "对搭戏角色过敏，只要别的角色跟她有互动，就在屏幕前疯狂吃醋或代入", tags: ["妈粉","女友粉","演员粉"] }
+                { letter: "C", desc: "追剧进度完全靠刷社交平台，不打开播放器，专门在超话里存别人整理的高清cut和动图。", tags: ["物料粉","颜粉","产出粉"] },
+                { letter: "D", desc: "对搭戏角色过敏，只要别的角色跟她有互动，就在屏幕前疯狂吃醋或代入。", tags: ["妈粉","女友粉","演员粉"] }
             ]},
             { text: "如果她毫无预兆地突然发动态（微博抖音小红书等），你的第一反应是：", options: [
                 { letter: "A", desc: "疯狂点赞评论转发，立刻去评论区抢前排热评。", tags: ["安利粉","数据粉","女友粉"] },
@@ -528,7 +577,7 @@
                 { letter: "D", desc: "根本不跟黑粉废话，直接熟练地举报。", tags: ["数据粉","妈粉","数据粉"] }
             ]},
             { text: "她突然宣布要举办一场个人演唱会，你最期待的是：", options: [
-                { letter: "A", desc: "演唱会舞台上的顶级舞美，", tags: ["舞台粉","舞台粉","颜粉"] },
+                { letter: "A", desc: "演唱会舞台上的顶级舞美。", tags: ["舞台粉","舞台粉","颜粉"] },
                 { letter: "B", desc: "全开麦的歌声加上音响对你耳朵造成的冲击。", tags: ["舞台粉","歌手粉","颜粉"] },
                 { letter: "C", desc: "演唱会上美的让你尖叫的新造型。", tags: ["妈粉","颜粉","女友粉"] },
                 { letter: "D", desc: "一些能够触及你心底的talking。", tags: ["颜粉","颜粉","访谈粉"] }
@@ -600,20 +649,20 @@
                 { letter: "D", desc: "她是远山的篝火，你是穿越荒野的旅人，只要望见那团光亮，便不再害怕迷路。", tags: [] }
             ]},
             { text: "回顾你追她的这段时光，你觉得你获得的最大收获是：", options: [
-                { letter: "A", desc: "认识了各种职业，天南海北的不同的朋友", tags: ["数据粉","安利粉"] },
+                { letter: "A", desc: "认识了各种职业，天南海北的不同的朋友。", tags: ["数据粉","氪金粉","安利粉"] },
                 { letter: "B", desc: "学到了很多为人处世的哲理和清醒的价值观。", tags: ["访谈粉","演员粉","妈粉"] },
                 { letter: "C", desc: "意外地开发了自己的画画/剪辑/写作技能。", tags: ["产出粉","舞台粉","演员粉"] },
                 { letter: "D", desc: "找到了精神寄托，感觉她给了我一种陪伴的力量。", tags: ["女友粉","妈粉","物料粉"] }
             ]},
             { text: "在硕大的宇宙中，你们都是各自航道上两颗独自运转的行星，却在浩瀚星河中有一刻的擦身和相遇。她想对于你的意义是什么？", options: [
                 { letter: "A", desc: "在偌大的宇宙里，你用你的爱为她建造了一片只有她能看见的星云，那是你们共同的秘密。", tags: ["女友粉","产出粉","访谈粉"] },
-                { letter: "B", desc: "很多个行星聚在一起，彼此辉映，让你们的光芒比独身的行星更加耀眼夺目。", tags: ["数据粉","安利粉"] },
+                { letter: "B", desc: "很多个行星聚在一起，彼此辉映，让你们的光芒比独身的行星更加耀眼夺目。", tags: ["数据粉","安利粉","氪金粉"] },
                 { letter: "C", desc: "宇宙再大，也比不上她在你心里的份量大，比不上她对你产生的吸引力大，你不由自主地绕着她旋转。", tags: ["颜粉","物料粉","妈粉"] },
                 { letter: "D", desc: "她是你在茫茫宇宙中时时刻刻都会想起的人，像一颗永远不灭北极星，指引着你的方向。", tags: ["歌手粉","舞台粉","演员粉"] }
             ]},
             { text: "如果让你用一句话概括你对她的感情，会是：", options: [
                 { letter: "A", desc: "她是你平淡生活里突然照进来的一束光，从此万物都有了颜色。", tags: ["女友粉","产出粉","物料粉"] },
-                { letter: "B", desc: "看着她一路跌跌撞撞走到今天，就像看着自己亲手浇灌的花永远盛开。", tags: ["妈粉","数据粉"] },
+                { letter: "B", desc: "看着她一路跌跌撞撞走到今天，就像看着自己亲手浇灌的花永远盛开。", tags: ["妈粉","氪金粉","数据粉"] },
                 { letter: "C", desc: "她是一个值得被全世界看见的演员，歌手，艺术家，而你很庆幸成为了她的观众。", tags: ["安利粉","演员粉","访谈粉"] },
                 { letter: "D", desc: "她像生活中一位从未谋面却无比懂我的知己，用作品陪我走过了漫长岁月。", tags: ["访谈粉","女友粉","安利粉"] }
             ]},
@@ -625,7 +674,7 @@
             { text: "陪李晟去疯跑。", options: [{ letter: "A", desc: "好。", tags: [] }] }
         ];
 
-        // 图片库 (按粉丝类型)
+        // 图片库 (11种)
         const typeImages = {
             "安利粉": [
                 "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAETiUBp6Nujq2O_0hcV2trualgYR6RNegACCCUAAmP2SFfY1z6l6-rtZjsE.jpg",
@@ -684,7 +733,7 @@
             ]
         };
 
-        // 结果描述库 (11种)
+        // 结果描述 (11种)
         const typeDescriptions = {
             "访谈粉": { name:"🎙️ 访谈粉", desc:"你爱上的不只是她的外观，更是她脑子里那些闪闪发光的思想。你热衷于翻遍她所有的采访，逐字逐句地品读她对角色、对生活、对世界的理解。她的某句话可能曾在某个夜里精准地击中你，让你豁然开朗。你看懂了她的灵魂，你是她的精神共鸣者，隔着屏幕你们完成了一场又一场深度对话。" },
             "颜粉": { name:"✨ 颜粉", desc:"你是毫不掩饰的外貌协会终身会员。入坑的契机可能只是一张惊为天人的生图，从此便一发不可收拾。你对光影、妆造、构图有着天生的审美直觉，手机相册里存满了她的神图，关于她的图你每一张都保存。美，就是你追星的第一生产力。" },
@@ -717,10 +766,11 @@
         const progressText = document.getElementById('progressText');
         const progressFill = document.getElementById('progressFill');
         const bottomProgress = document.getElementById('bottomProgress');
+        const saveImageBtn = document.getElementById('saveImageBtn');
 
         let isAutoJumping = false;
 
-        // 灯箱相关
+        // 灯箱
         function showLightbox(imgSrc) {
             const lightbox = document.createElement('div');
             lightbox.className = 'lightbox';
@@ -728,10 +778,9 @@
             img.src = imgSrc;
             lightbox.appendChild(img);
             document.body.appendChild(lightbox);
-            lightbox.addEventListener('click', () => {
-                document.body.removeChild(lightbox);
-            });
+            lightbox.addEventListener('click', () => document.body.removeChild(lightbox));
         }
+        window.showLightbox = showLightbox;
 
         function startTest() {
             coverPage.classList.add('hidden');
@@ -800,9 +849,7 @@
             scoringIndices.forEach(i => {
                 const ans = answers[i];
                 if (ans && ans.tags) {
-                    ans.tags.forEach(tag => {
-                        map.set(tag, (map.get(tag) || 0) + 1);
-                    });
+                    ans.tags.forEach(tag => map.set(tag, (map.get(tag) || 0) + 1));
                 }
             });
             return Array.from(map.entries()).sort((a,b) => b[1]-a[1]);
@@ -814,21 +861,35 @@
             const total = topTags.reduce((s, t) => s + t[1], 0);
             const colors = ['#e8749a', '#f6a5c1', '#fbc1d4'];
             let start = -Math.PI/2;
-            ctx.clearRect(0,0,240,240);
+            ctx.clearRect(0,0,220,220);
             topTags.forEach((tag, i) => {
                 const angle = (tag[1]/total) * 2 * Math.PI;
                 ctx.beginPath();
                 ctx.fillStyle = colors[i % colors.length];
-                ctx.moveTo(120,120);
-                ctx.arc(120,120,100, start, start+angle);
+                ctx.moveTo(110,110);
+                ctx.arc(110,110,90, start, start+angle);
                 ctx.closePath();
                 ctx.fill();
                 start += angle;
             });
             ctx.beginPath();
             ctx.fillStyle = '#fff0f5';
-            ctx.arc(120,120,55,0,2*Math.PI);
+            ctx.arc(110,110,48,0,2*Math.PI);
             ctx.fill();
+        }
+
+        function renderBarChart(top3) {
+            const total = top3.reduce((s, t) => s + t[1], 0);
+            const colors = ['#e8749a', '#f6a5c1', '#fbc1d4'];
+            const barArea = document.getElementById('barChartArea');
+            barArea.innerHTML = top3.map((tag, i) => {
+                const percent = (tag[1] / total) * 100;
+                return `<div class="bar-item">
+                    <span class="bar-label">${tag[0]}</span>
+                    <div class="bar-bg"><div class="bar-fill" style="width:${percent}%; background:${colors[i]};"></div></div>
+                    <span class="bar-percent">${percent.toFixed(1)}%</span>
+                </div>`;
+            }).join('');
         }
 
         function showResult() {
@@ -841,13 +902,7 @@
             const sorted = calculateScores();
             const top3 = sorted.slice(0,3);
             drawPieChart(top3);
-            
-            const legend = document.getElementById('legendArea');
-            const colors = ['#e8749a', '#f6a5c1', '#fbc1d4'];
-            legend.innerHTML = top3.map((t,i) => {
-                const pct = ((t[1] / top3.reduce((s,x)=>s+x[1],0))*100).toFixed(1);
-                return `<div class="legend-item"><span class="color-dot" style="background:${colors[i]}"></span> ${t[0]} ${pct}%</div>`;
-            }).join('');
+            renderBarChart(top3);
             
             const descBox = document.getElementById('typeDescriptions');
             descBox.innerHTML = top3.map(t => {
@@ -857,12 +912,28 @@
                 return `<div class="type-card"><div class="type-name">${info.name}</div><div class="type-desc">${info.desc}</div>${imgHtml}</div>`;
             }).join('');
             
-            // 将showLightbox挂载到全局供onclick使用
-            window.showLightbox = showLightbox;
-            
             quizSection.style.display = 'none';
             resultSection.style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 保存图片功能
+        function saveAsImage() {
+            const element = document.getElementById('resultSection');
+            html2canvas(element, {
+                scale: 2,
+                backgroundColor: null,
+                allowTaint: true,
+                useCNAME: true,
+                logging: false
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = '晟斗士属性图鉴.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).catch(err => {
+                alert('保存失败，可稍后重试。');
+            });
         }
 
         function resetAll() {
@@ -879,6 +950,7 @@
         nextBtn.addEventListener('click', () => { if (currentIndex<totalQ-1) goToPage(currentIndex+1); });
         submitBtn.addEventListener('click', showResult);
         resetBtn.addEventListener('click', resetAll);
+        saveImageBtn.addEventListener('click', saveAsImage);
     })();
 </script>
 </body>
