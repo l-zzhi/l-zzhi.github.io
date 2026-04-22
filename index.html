@@ -23,6 +23,27 @@
             justify-content: center;
             padding: 16px;
         }
+        /* 灯箱遮罩 */
+        .lightbox {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            cursor: zoom-out;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border: 3px solid white;
+            object-fit: contain;
+        }
         .cover-container {
             max-width: 760px;
             width: 100%;
@@ -367,6 +388,29 @@
         .type-desc {
             color: #4a2233;
             line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .type-images {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .type-images img {
+            width: calc(33.33% - 7px);
+            max-width: 120px;
+            border-radius: 16px;
+            object-fit: cover;
+            aspect-ratio: 1/1;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 2px solid white;
+            background: #fce4ec;
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+        .type-images img:hover {
+            transform: scale(1.02);
         }
         .footer-note {
             font-size: 0.8rem;
@@ -391,6 +435,7 @@
             .q-text { font-size: 1.25rem; }
             .opt-desc { font-size: 0.95rem; }
             .option-item { padding: 14px 16px; }
+            .type-images img { max-width: 100px; }
         }
     </style>
 </head>
@@ -444,156 +489,134 @@
 
 <script>
     (function(){
-        // ---------- 题库（严格按照文档内容，计分题1-16，19-21）----------
+        // 题库（与之前一致）
         const questions = [
-            // 1
             { text: "刚结束疲惫的一天，你最想通过哪种方式“回血”？", options: [
                 { letter: "A", desc: "翻出李晟以前的舞台，舔颜并为李晟超好听的歌声超有魅力的舞台发疯。", tags: ["舞台粉","颜粉","歌手粉"] },
                 { letter: "B", desc: "打开超话，看看今天超话更新的内容，签到点赞评论转发做做数据。", tags: ["数据粉","产出粉","数据粉"] },
                 { letter: "C", desc: "打开各个软件看李晟今天有没有更新。", tags: ["物料粉","产出粉","物料粉"] },
                 { letter: "D", desc: "打开音乐软件，循环播放李晟的歌。", tags: ["歌手粉","舞台粉","歌手粉"] }
             ]},
-            // 2
             { text: "如果要向一个人不了解李晟的人安利她，你会首先选择哪一项？", options: [
                 { letter: "A", desc: "介绍某部剧里很有魅力的角色，精细的演技。", tags: ["安利粉","演员粉","演员粉"] },
                 { letter: "B", desc: "翻出某个采访里你觉得很有道理很哲学的话，让你从中学到/跟你一模一样的部分。", tags: ["访谈粉","访谈粉","安利粉"] },
                 { letter: "C", desc: "令人着迷的颜值，女神好伟大的一张脸", tags: ["安利粉","颜粉","女友粉"] },
                 { letter: "D", desc: "光彩四射的舞台，谁看谁爱上的满分爱豆", tags: ["安利粉","歌手粉","舞台粉"] }
             ]},
-            // 3
             { text: "晚上躺在床上刷手机，你最可能在干什么？", options: [
                 { letter: "A", desc: "凌晨零点抢超话首签，连签也不能断。", tags: ["数据粉","数据粉","物料粉"] },
                 { letter: "B", desc: "在各个软件寻找她的踪迹，到处搜索刷视频。", tags: ["颜粉","访谈粉","物料粉"] },
                 { letter: "C", desc: "打开那部看了无数遍的剧继续第n遍观看。", tags: ["演员粉","演员粉","颜粉"] },
                 { letter: "D", desc: "听歌，好美妙动听悦耳的声音。", tags: ["歌手粉","歌手粉","舞台粉"] }
             ]},
-            // 4 (修正字母)
             { text: "她的新剧终于播出了，你的状态是：", options: [
                 { letter: "A", desc: "疯狂截图她的绝美造型，发朋友圈发微博发给朋友猛夸。", tags: ["颜粉","安利粉","颜粉"] },
                 { letter: "B", desc: "专心投入剧情，等结束后马上发长篇剧评夸演技。", tags: ["演员粉","安利粉","演员粉"] },
                 { letter: "C", desc: "追剧进度完全靠刷社交平台，不打开播放器，专门在超话里存别人整理的高清cut和动图", tags: ["物料粉","颜粉","产出粉"] },
                 { letter: "D", desc: "对搭戏角色过敏，只要别的角色跟她有互动，就在屏幕前疯狂吃醋或代入", tags: ["妈粉","女友粉","演员粉"] }
             ]},
-            // 5
             { text: "如果她毫无预兆地突然发动态（微博抖音小红书等），你的第一反应是：", options: [
                 { letter: "A", desc: "疯狂点赞评论转发，立刻去评论区抢前排热评。", tags: ["安利粉","数据粉","女友粉"] },
                 { letter: "B", desc: "赶紧点开大图，看看图文内容，夸赞美貌。", tags: ["颜粉","物料粉","女友粉"] },
                 { letter: "C", desc: "马上截图发给同担并疯狂尖叫。", tags: ["颜粉","物料粉","颜粉"] },
                 { letter: "D", desc: "仔细查看发表的文字或配文，开始逐字研究。", tags: ["产出粉","访谈粉","颜粉"] }
             ]},
-            // 6
             { text: "她在工作（剧组综艺等）中遭遇了不公正的舆论抹黑，你会：", options: [
                 { letter: "A", desc: "迅速整理时间线和逻辑图，发长文替她澄清。", tags: ["安利粉","妈粉","数据粉"] },
                 { letter: "B", desc: "组织粉丝群，有条不紊地带话题、控评、做数据。", tags: ["数据粉","安利粉","产出粉"] },
                 { letter: "C", desc: "气得睡不着觉，觉得全天下都在欺负我的宝贝。", tags: ["妈粉","女友粉","数据粉"] },
                 { letter: "D", desc: "根本不跟黑粉废话，直接熟练地举报。", tags: ["数据粉","妈粉","数据粉"] }
             ]},
-            // 7
             { text: "她突然宣布要举办一场个人演唱会，你最期待的是：", options: [
                 { letter: "A", desc: "演唱会舞台上的顶级舞美，", tags: ["舞台粉","舞台粉","颜粉"] },
                 { letter: "B", desc: "全开麦的歌声加上音响对你耳朵造成的冲击。", tags: ["舞台粉","歌手粉","颜粉"] },
                 { letter: "C", desc: "演唱会上美的让你尖叫的新造型。", tags: ["妈粉","颜粉","女友粉"] },
                 { letter: "D", desc: "一些能够触及你心底的talking。", tags: ["颜粉","颜粉","访谈粉"] }
             ]},
-            // 8
             { text: "如果你的手机壁纸是她，那张图具体是什么样的她？", options: [
                 { letter: "A", desc: "舞台上的她。", tags: ["舞台粉","歌手粉","女友粉"] },
                 { letter: "B", desc: "生活中的她。", tags: ["颜粉","女友粉","妈粉"] },
                 { letter: "C", desc: "一套艺术图中的她。", tags: ["访谈粉","数据粉","颜粉"] },
                 { letter: "D", desc: "剧中的角色。", tags: ["演员粉","颜粉","演员粉"] }
             ]},
-            // 9
             { text: "你手机相册里关于她的内容，占比最多的是：", options: [
                 { letter: "A", desc: "各种活动的高清精修图和神级生图。", tags: ["颜粉","物料粉","舞台粉"] },
                 { letter: "B", desc: "她的各种舞台的截图和动图。", tags: ["舞台粉","歌手粉","产出粉"] },
                 { letter: "C", desc: "各种采访时的金句截图和表情包。", tags: ["访谈粉","安利粉","产出粉"] },
                 { letter: "D", desc: "她日常生活中的随手拍和Vlog截图。", tags: ["物料粉","妈粉","女友粉"] }
             ]},
-            // 10
             { text: "你的手机内存又双叒叕报警了，必须清理一些东西，你会怎么删？", options: [
                 { letter: "A", desc: "只保留最高清的生图和最绝的舞台直拍，糊图和旧物料全删。", tags: ["物料粉","颜粉","舞台粉"] },
                 { letter: "B", desc: "删掉那些单纯的风景照或静图，保留有情节的Vlog和访谈片段。", tags: ["访谈粉","演员粉","妈粉"] },
                 { letter: "C", desc: "把日常听的她的歌转存到云盘，手机里只留现场live版。", tags: ["歌手粉","舞台粉","歌手粉"] },
                 { letter: "D", desc: "根本舍不得删！直接去换一个内存大的的新手机。", tags: ["物料粉","物料粉","女友粉"] }
             ]},
-            // 11
             { text: "在所有关于她的“二创作品（同人产出）”中，哪种形式最轻易打动你的心？", options: [
                 { letter: "A", desc: "用她绝美的图片配上极具氛围感BGM的混剪视频。", tags: ["颜粉","安利粉","女友粉"] },
                 { letter: "B", desc: "把她不同时期的采访音频拼凑起来，剪辑成一段“心路历程”。", tags: ["访谈粉","安利粉","产出粉"] },
                 { letter: "C", desc: "纯享版的舞台多机位切换混剪，展现舞台上的绝对实力与魅力。", tags: ["歌手粉","舞台粉","安利粉"] },
                 { letter: "D", desc: "每一个剧中角色的混剪，每一个构成她一部分的碎片。", tags: ["演员粉","安利粉","产出粉"] }
             ]},
-            // 12
             { text: "如果她要出一本自传或者个人写真书，你最希望里面包含什么内容？", options: [
                 { letter: "A", desc: "大量绝美未公开的高清照和时尚大片。", tags: ["颜粉","物料粉","访谈粉"] },
                 { letter: "B", desc: "她亲笔写的内心独白和从业心路历程。", tags: ["访谈粉","演员粉","妈粉"] },
                 { letter: "C", desc: "生活中的真实的她。", tags: ["物料粉","女友粉","产出粉"] },
                 { letter: "D", desc: "详细记录她每一场经典舞台背后的排练日记。", tags: ["舞台粉","歌手粉","产出粉"] }
             ]},
-            // 13
             { text: "你觉得她对你来说，别人最不可替代的属于她的一部分是什么？", options: [
                 { letter: "A", desc: "情绪的稳定剂。听到她开口唱歌的那个瞬间，世界就安静的只剩她的歌声。", tags: ["歌手粉","舞台粉","妈粉"] },
                 { letter: "B", desc: "信仰的实体化。看着她一步一个脚印，这就是努力和坚持的意义。", tags: ["演员粉","舞台粉","妈粉"] },
                 { letter: "C", desc: "灵感的来源。她的每一个眼神、每一场戏，每一个角色，都能唤醒你表达的欲望。", tags: ["舞台粉","演员粉","访谈粉"] },
                 { letter: "D", desc: "伤痛的避难所。只要想到这个世界上有她的存在，就觉得所有痛都能被治愈。", tags: ["女友粉","妈粉","安利粉"] }
             ]},
-            // 14
             { text: "当你遇到现实生活中的挫折时，你通常会想起怎么样的“她”来治愈自己？", options: [
                 { letter: "A", desc: "反复观看你最爱的几次现场，用磅礴的能量将负面情绪逐渐赶走。", tags: ["歌手粉","舞台粉","数据粉"] },
                 { letter: "B", desc: "翻出她以前的采访，看她在日常生活中是如何调节自己情绪，面对生活的。", tags: ["访谈粉","演员粉","安利粉"] },
                 { letter: "C", desc: "打开她的社交帐号，一条一条翻看她的动态来调节自己的情绪。", tags: ["数据粉","数据粉","产出粉"] },
                 { letter: "D", desc: "脑海里回放她在某部剧中饰演的某个角色的台词，想起那个角色面对挫折是如果应对的。", tags: ["演员粉","产出粉","舞台粉"] }
             ]},
-            // 15
             { text: "你觉得她最迷人的瞬间是在什么时候？", options: [
                 { letter: "A", desc: "聚光灯亮起，舞台中间那个掌控一切的她。", tags: ["舞台粉","歌手粉","颜粉"] },
                 { letter: "B", desc: "采访时别人问她问题，她分析解剖问题，进行深度回答。", tags: ["访谈粉","演员粉","安利粉"] },
                 { letter: "C", desc: "她完全沉浸在角色里，连眼神都变了的时候。", tags: ["演员粉","访谈粉","产出粉"] },
                 { letter: "D", desc: "只要她出现在我的视线里，每一秒都迷人。", tags: ["女友粉","颜粉","妈粉"] }
             ]},
-            // 16
             { text: "看到她多年前刚出道时的青涩影像，你的第一反应是？", options: [
                 { letter: "A", desc: "感慨她一路走来的成长与蜕变，更爱现在的她。", tags: ["演员粉","访谈粉","妈粉"] },
                 { letter: "B", desc: "翻出从你认识她到现在保存的图片，原来你已经陪她走了这么久。", tags: ["妈粉","数据粉","安利粉"] },
                 { letter: "C", desc: "考古素材+1，赶紧存下来剪进下一个混剪视频里。", tags: ["物料粉","产出粉","妈粉"] },
                 { letter: "D", desc: "好想穿越回去保护那个小小的她，和她一路走下去。", tags: ["妈粉","物料粉","女友粉"] }
             ]},
-            // 17 (无标签)
             { text: "如果可以和她一起度过一天，你会和她一起做什么？", options: [
                 { letter: "A", desc: "跟着她重游她记忆里最珍贵的地方，听她讲述她的过往。", tags: [] },
                 { letter: "B", desc: "带她去你成长生活的城市，向她介绍你生命中最重要的风景。", tags: [] },
                 { letter: "C", desc: "和她一起去她拍戏的片场，看她如何工作，如何赋予角色生命。", tags: [] },
                 { letter: "D", desc: "一起去海边看日出落日，再回到家里一起做饭、聊天、看电影。", tags: [] }
             ]},
-            // 18 (无标签)
             { text: "在你的世界里，你觉得“她”和“你”是什么关系？", options: [
                 { letter: "A", desc: "她是远方一位素未谋面却心意相通的朋友，总在你情绪低落的时刻恰好出现。", tags: [] },
                 { letter: "B", desc: "她是你的精神锚点，不管外界怎样，只要想起她的名字，内心便重归宁静。", tags: [] },
                 { letter: "C", desc: "她是你的一面镜子。你透过她的清醒与努力看到理想中的自己，并将她作为追随的方向。", tags: [] },
                 { letter: "D", desc: "她是远山的篝火，你是穿越荒野的旅人，只要望见那团光亮，便不再害怕迷路。", tags: [] }
             ]},
-            // 19
             { text: "回顾你追她的这段时光，你觉得你获得的最大收获是：", options: [
                 { letter: "A", desc: "认识了各种职业，天南海北的不同的朋友", tags: ["数据粉","安利粉"] },
                 { letter: "B", desc: "学到了很多为人处世的哲理和清醒的价值观。", tags: ["访谈粉","演员粉","妈粉"] },
                 { letter: "C", desc: "意外地开发了自己的画画/剪辑/写作技能。", tags: ["产出粉","舞台粉","演员粉"] },
                 { letter: "D", desc: "找到了精神寄托，感觉她给了我一种陪伴的力量。", tags: ["女友粉","妈粉","物料粉"] }
             ]},
-            // 20
             { text: "在硕大的宇宙中，你们都是各自航道上两颗独自运转的行星，却在浩瀚星河中有一刻的擦身和相遇。她想对于你的意义是什么？", options: [
                 { letter: "A", desc: "在偌大的宇宙里，你用你的爱为她建造了一片只有她能看见的星云，那是你们共同的秘密。", tags: ["女友粉","产出粉","访谈粉"] },
                 { letter: "B", desc: "很多个行星聚在一起，彼此辉映，让你们的光芒比独身的行星更加耀眼夺目。", tags: ["数据粉","安利粉"] },
                 { letter: "C", desc: "宇宙再大，也比不上她在你心里的份量大，比不上她对你产生的吸引力大，你不由自主地绕着她旋转。", tags: ["颜粉","物料粉","妈粉"] },
                 { letter: "D", desc: "她是你在茫茫宇宙中时时刻刻都会想起的人，像一颗永远不灭北极星，指引着你的方向。", tags: ["歌手粉","舞台粉","演员粉"] }
             ]},
-            // 21
             { text: "如果让你用一句话概括你对她的感情，会是：", options: [
                 { letter: "A", desc: "她是你平淡生活里突然照进来的一束光，从此万物都有了颜色。", tags: ["女友粉","产出粉","物料粉"] },
                 { letter: "B", desc: "看着她一路跌跌撞撞走到今天，就像看着自己亲手浇灌的花永远盛开。", tags: ["妈粉","数据粉"] },
                 { letter: "C", desc: "她是一个值得被全世界看见的演员，歌手，艺术家，而你很庆幸成为了她的观众。", tags: ["安利粉","演员粉","访谈粉"] },
                 { letter: "D", desc: "她像生活中一位从未谋面却无比懂我的知己，用作品陪我走过了漫长岁月。", tags: ["访谈粉","女友粉","安利粉"] }
             ]},
-            // 22-25 纯情感题无标签
             { text: "你觉得李晟好看吗", options: [
                 { letter: "A", desc: "这还用问？", tags: [] }, { letter: "B", desc: "这简直是女神。", tags: [] }, { letter: "C", desc: "好看。", tags: [] }, { letter: "D", desc: "超级好看。", tags: [] }
             ]},
@@ -601,6 +624,65 @@
             { text: "你会继续爱李晟吗", options: [{ letter: "A", desc: "会。", tags: [] }] },
             { text: "陪李晟去疯跑。", options: [{ letter: "A", desc: "好。", tags: [] }] }
         ];
+
+        // 图片库 (按粉丝类型)
+        const typeImages = {
+            "安利粉": [
+                "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAETiUBp6Nujq2O_0hcV2trualgYR6RNegACCCUAAmP2SFfY1z6l6-rtZjsE.jpg",
+                "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAETiUJp6Nu_Z7PNQCf3uDvlzoboqPSpzwACCiUAAmP2SFdFPSGjhMs1kDsE.png",
+                "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAETiT9p6NufxUaoc9jItwABmXAGAxtUUV4AAgclAAJj9khX_GbY1S69cjQ7BA.png"
+            ],
+            "产出粉": [
+                "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAETiUFp6Nu7WN_aUOeyXUHIil7qNxywxQACCSUAAmP2SFev8ClDdJ8ttDsE.png",
+                "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAETiUNp6NvwEuswp6cq5istBFz4HBvMjgACCyUAAmP2SFcMiH5LfFZ_fzsE.png",
+                "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAETiURp6NwFortw2Yz_Y4Mc7C89YVyGEAACDCUAAmP2SFdE_8QEntMpkzsE.png"
+            ],
+            "访谈粉": [
+                "https://s41.ax1x.com/2026/04/22/peRmzY8.png",
+                "https://s41.ax1x.com/2026/04/22/peRnClQ.jpg",
+                "https://s41.ax1x.com/2026/04/22/peRnPyj.jpg"
+            ],
+            "歌手粉": [
+                "https://s41.ax1x.com/2026/04/22/peRnPyj.jpg",
+                "https://s41.ax1x.com/2026/04/22/peRnkmn.png",
+                "https://s41.ax1x.com/2026/04/22/peRniOs.jpg"
+            ],
+            "演员粉": [
+                "https://s41.ax1x.com/2026/04/22/peRnET0.png",
+                "https://s41.ax1x.com/2026/04/22/peRneYT.png",
+                "https://i.ibb.co/v41vQzc2/3.png"
+            ],
+            "妈粉": [
+                "https://i.ibb.co/S4qHwVpv/1.png",
+                "https://i.ibb.co/GL4jpd6/2.png",
+                "https://i.ibb.co/JRtLTN9H/3.png"
+            ],
+            "女友粉": [
+                "https://i.ibb.co/8n6mvFXr/1.png",
+                "https://i.ibb.co/dJMWJDVB/2.jpg",
+                "https://i.ibb.co/zTm86zDZ/3.png"
+            ],
+            "数据粉": [
+                "https://i.ibb.co/1tztJZqK/1.jpg",
+                "https://i.ibb.co/XxrNxYjk/2.png",
+                "https://i.ibb.co/4wWKkpNW/3.png"
+            ],
+            "舞台粉": [
+                "https://i.ibb.co/BVzrZXn6/1.png",
+                "https://i.ibb.co/JFQcR4xz/2.png",
+                "https://i.ibb.co/C5r23yYW/3.png"
+            ],
+            "物料粉": [
+                "https://i.ibb.co/7xTjvmrh/1.png",
+                "https://i.ibb.co/qFDJMQy4/2.jpg",
+                "https://i.ibb.co/xt2J0ngQ/3.png"
+            ],
+            "颜粉": [
+                "https://i.ibb.co/JjgVjxqt/1.png",
+                "https://i.ibb.co/5hRp9ZTb/2.png",
+                "https://i.ibb.co/6RQgZRc5/3.png"
+            ]
+        };
 
         // 结果描述库 (11种)
         const typeDescriptions = {
@@ -637,6 +719,19 @@
         const bottomProgress = document.getElementById('bottomProgress');
 
         let isAutoJumping = false;
+
+        // 灯箱相关
+        function showLightbox(imgSrc) {
+            const lightbox = document.createElement('div');
+            lightbox.className = 'lightbox';
+            const img = document.createElement('img');
+            img.src = imgSrc;
+            lightbox.appendChild(img);
+            document.body.appendChild(lightbox);
+            lightbox.addEventListener('click', () => {
+                document.body.removeChild(lightbox);
+            });
+        }
 
         function startTest() {
             coverPage.classList.add('hidden');
@@ -701,7 +796,6 @@
 
         function calculateScores() {
             const map = new Map();
-            // 仅统计1-16题、19-21题 (索引0-15, 18-20)
             const scoringIndices = [...Array(16).keys(), 18, 19, 20];
             scoringIndices.forEach(i => {
                 const ans = answers[i];
@@ -758,8 +852,13 @@
             const descBox = document.getElementById('typeDescriptions');
             descBox.innerHTML = top3.map(t => {
                 const info = typeDescriptions[t[0]] || { name:t[0], desc:"每一种喜欢都独一无二。" };
-                return `<div class="type-card"><div class="type-name">${info.name}</div><div class="type-desc">${info.desc}</div></div>`;
+                const images = typeImages[t[0]] || [];
+                const imgHtml = images.length ? `<div class="type-images">${images.map(url => `<img src="${url}" alt="${t[0]}" onclick="showLightbox('${url}')">`).join('')}</div>` : '';
+                return `<div class="type-card"><div class="type-name">${info.name}</div><div class="type-desc">${info.desc}</div>${imgHtml}</div>`;
             }).join('');
+            
+            // 将showLightbox挂载到全局供onclick使用
+            window.showLightbox = showLightbox;
             
             quizSection.style.display = 'none';
             resultSection.style.display = 'block';
