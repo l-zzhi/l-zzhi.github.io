@@ -3,105 +3,540 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>🌸 LSTI · 晟斗士人格类型测试</title>
-    <!-- html2canvas 保存图片 -->
+    <title> LSTI · 晟斗士人格类型测试</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Quicksand', 'Segoe UI', 'Helvetica Neue', 'Noto Sans', sans-serif;
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Quicksand','Segoe UI','Helvetica Neue','Noto Sans',sans-serif; }
+        body { background-image:url('https://s41.ax1x.com/2026/04/21/peg5TqU.jpg'); background-size:cover; background-position:center; background-attachment:fixed; background-color:#fad4e4; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16px; }
+        .lightbox { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(5px); display:flex; align-items:center; justify-content:center; z-index:9999; cursor:zoom-out; }
+        .lightbox img { max-width:90%; max-height:90%; border-radius:20px; box-shadow:0 20px 40px rgba(0,0,0,0.3); border:3px solid white; object-fit:contain; }
+        .cover-container { max-width:680px; width:100%; background:rgba(255,255,255,0.2); border-radius:40px; padding:35px 25px; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:480px; text-align:center; border:1px solid rgba(255,220,230,0.5); box-shadow:0 10px 25px -8px rgba(180,80,120,0.15); backdrop-filter:none; }
+        .cover-lsti { font-size:1.3rem; font-weight:600; color:#b95c7c; letter-spacing:8px; margin-bottom:10px; }
+        .cover-title { font-family:'YouYuan','幼圆','Segoe UI',sans-serif; font-size:3rem; font-weight:700; background:linear-gradient(135deg,#d45c86 0%,#b34e6e 100%); -webkit-background-clip:text; background-clip:text; color:transparent; text-shadow:2px 2px 10px rgba(210,80,120,0.25); margin-bottom:15px; letter-spacing:2px; line-height:1.2; white-space:nowrap; }
+        .cover-subtitle { font-size:1.1rem; color:#b34e6e; margin-bottom:35px; font-weight:500; letter-spacing:2px; opacity:0.9; border-top:1.5px solid rgba(210,80,120,0.5); border-bottom:1.5px solid rgba(210,80,120,0.5); padding:10px 25px; display:inline-block; }
+        .cover-btn { background:rgba(255,255,255,0.4); backdrop-filter:blur(2px); border:2px solid #e8749a; color:#a13b63; font-size:1.5rem; font-weight:700; padding:14px 44px; border-radius:60px; cursor:pointer; box-shadow:0 6px 0 #bc4e76,0 8px 20px rgba(210,80,120,0.2); transition:0.2s; margin-top:20px; }
+        .cover-btn:hover { background:rgba(255,220,230,0.7); transform:translateY(-2px); box-shadow:0 8px 0 #bc4e76,0 12px 25px rgba(210,80,120,0.25); }
+        .cover-footer { margin-top:25px; font-size:0.9rem; color:#b95c7c; letter-spacing:3px; opacity:0.8; }
+        .test-container { max-width:760px; width:100%; background:rgba(255,255,255,0.15); border-radius:36px; box-shadow:0 20px 40px -8px rgba(180,80,120,0.15); padding:28px 24px; border:1px solid rgba(255,220,230,0.3); }
+        .title-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; padding-bottom:16px; border-bottom:2px solid rgba(251,182,206,0.5); }
+        h1 { font-weight:650; font-size:1.8rem; color:#832a4c; display:flex; align-items:baseline; gap:8px; }
+        h1 small { font-size:1rem; font-weight:500; color:#b95c7c; }
+        .music-toggle { background:rgba(255,255,255,0.3); border:none; color:#a13b63; font-size:1.4rem; width:44px; height:44px; border-radius:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 2px 8px rgba(180,80,120,0.1); transition:0.15s; border:1px solid rgba(251,193,212,0.5); }
+        .music-toggle:hover { background:rgba(251,196,214,0.4); transform:scale(1.05); }
+        .music-toggle.off { opacity:0.7; color:#888; }
+        .progress-container { display:flex; align-items:center; gap:12px; margin:12px 0 20px; }
+        .progress-label { font-weight:600; color:#832a4c; background:rgba(255,224,235,0.4); padding:5px 16px; border-radius:30px; font-size:0.9rem; }
+        .progress-track { flex:1; height:8px; background:rgba(251,196,214,0.4); border-radius:20px; overflow:hidden; }
+        .progress-fill { height:100%; width:4%; background:#d45c86; border-radius:20px; transition:width 0.25s; }
+        .question-card { background:rgba(255,240,245,0.25); border-radius:32px; padding:28px 24px; margin:16px 0 24px; box-shadow:0 8px 18px -6px rgba(180,60,100,0.08); border:1px solid rgba(251,193,212,0.4); }
+        .q-header { display:flex; align-items:center; gap:10px; margin-bottom:24px; }
+        .q-num-badge { background:#e8749a; color:white; font-weight:700; width:42px; height:42px; display:flex; align-items:center; justify-content:center; border-radius:30px; font-size:1.2rem; box-shadow:0 4px 6px rgba(200,70,110,0.25); }
+        .q-text { font-size:1.45rem; font-weight:700; line-height:1.35; color:#63203a; flex:1; text-shadow:0 1px 3px rgba(255,255,255,0.3); }
+        .options-list { display:flex; flex-direction:column; gap:14px; }
+        .option-item { display:flex; align-items:flex-start; background:rgba(255,255,255,0.35); border-radius:24px; padding:16px 20px; border:1.5px solid rgba(251,182,206,0.6); box-shadow:0 3px 0 rgba(233,165,188,0.4); cursor:pointer; transition:all 0.15s; }
+        .option-item.selected { background:rgba(253,227,236,0.65); border-color:#d45c86; box-shadow:0 3px 0 #bc4e76; }
+        .option-item input[type="radio"] { appearance:none; -webkit-appearance:none; width:22px; height:22px; border:2px solid #e28fb0; border-radius:50%; margin-right:18px; margin-top:2px; flex-shrink:0; transition:0.1s; }
+        .option-item input[type="radio"]:checked { border-color:#bc4e76; background:#bc4e76; box-shadow:inset 0 0 0 5px white,0 0 0 1px #bc4e76; }
+        .opt-letter { font-weight:800; font-size:1.5rem; color:#a13b63; width:32px; text-align:center; margin-right:12px; flex-shrink:0; }
+        .opt-desc { font-size:1.05rem; color:#3a1a28; flex:1; line-height:1.4; font-weight:500; }
+        .nav-row { display:flex; justify-content:space-between; align-items:center; margin-top:8px; }
+        .nav-btn { background:rgba(255,224,235,0.5); border:none; padding:12px 28px; border-radius:50px; font-weight:600; font-size:1.1rem; color:#832a4c; box-shadow:0 4px 0 #e9a5bc; cursor:pointer; transition:0.1s; border:1px solid rgba(251,193,212,0.6); min-width:120px; }
+        .nav-btn:disabled { opacity:0.4; box-shadow:0 2px 0 #e9a5bc; transform:translateY(2px); pointer-events:none; }
+        .nav-btn:hover:not(:disabled) { background:rgba(251,196,214,0.7); transform:translateY(-1px); box-shadow:0 5px 0 #d989a8; }
+        .submit-btn { background:#d45c86; color:white; box-shadow:0 5px 0 #a63a62; border:none; padding:14px 32px; font-size:1.2rem; }
+        .submit-btn:hover { background:#e0709a; }
+        .footer-progress { display:flex; justify-content:center; margin:20px 0 8px; }
+        .progress-badge { background:rgba(255,255,255,0.4); padding:10px 32px; border-radius:50px; font-weight:600; color:#832a4c; font-size:1.2rem; box-shadow:0 2px 10px rgba(200,80,120,0.1); border:1px solid rgba(251,193,212,0.5); }
+        .page-footer-lsti { text-align:center; font-size:0.75rem; color:#b95c7c; letter-spacing:2px; margin-top:8px; opacity:0.7; }
+        .result-panel { margin-top:10px; background:rgba(255,240,245,0.35); border-radius:32px; padding:28px 24px; border-left:8px solid #d45c86; box-shadow:0 8px 20px -6px rgba(180,60,100,0.1); }
+        .result-lsti { font-size:1.2rem; font-weight:600; color:#a13b63; letter-spacing:4px; text-align:center; margin-bottom:5px; }
+        .result-title { font-size:1.9rem; font-weight:700; color:#63203a; margin-bottom:20px; text-align:center; line-height:1.3; }
+        .chart-container { display:flex; justify-content:center; margin:10px 0 15px; }
+        canvas { max-width:220px; width:100%; height:auto; filter:drop-shadow(0 4px 8px rgba(0,0,0,0.1)); }
+        .bar-chart-area { margin:16px 0 10px; padding:0 8px; }
+        .bar-item { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+        .bar-label { width:70px; font-weight:600; color:#63203a; font-size:1rem; }
+        .bar-bg { flex:1; height:20px; background:#f9d6e0; border-radius:30px; overflow:hidden; box-shadow:inset 0 1px 3px rgba(0,0,0,0.05); }
+        .bar-fill { height:100%; width:0%; border-radius:30px; transition:width 0.3s; }
+        .bar-percent { width:50px; text-align:right; font-weight:600; color:#a13b63; }
+        .type-desc-box { margin-top:20px; }
+        .type-card { background:rgba(255,255,255,0.45); border-radius:24px; padding:18px 20px; margin-bottom:16px; border:1px solid rgba(251,193,212,0.6); }
+        .type-name { font-size:1.5rem; font-weight:700; color:#a13b63; margin-bottom:6px; }
+        .type-desc { color:#4a2233; line-height:1.5; margin-bottom:15px; }
+        .type-images { display:flex; gap:10px; margin-top:12px; justify-content:center; flex-wrap:wrap; }
+        .type-images img { width:calc(33.33% - 7px); max-width:120px; border-radius:16px; object-fit:cover; aspect-ratio:1/1; box-shadow:0 4px 10px rgba(0,0,0,0.1); border:2px solid white; background:#fce4ec; cursor:pointer; transition:transform 0.15s; }
+        .type-images img:hover { transform:scale(1.02); }
+        .save-btn-container { display:flex; justify-content:center; margin:24px 0 8px; }
+        .save-btn { background:#a13b63; color:white; border:none; padding:14px 36px; border-radius:50px; font-weight:600; font-size:1.2rem; box-shadow:0 5px 0 #6d2a45; cursor:pointer; transition:0.1s; border:1px solid #c96b8a; }
+        .save-btn:hover { background:#bc4e76; transform:translateY(-2px); box-shadow:0 7px 0 #6d2a45; }
+        .footer-note { font-size:0.8rem; color:#b95c7c; text-align:center; margin-top:24px; }
+        .disclaimer { text-align:center; margin-top:20px; font-size:0.85rem; color:#a05a78; opacity:0.8; }
+        .hidden { display:none; }
+        @media (max-width:500px) { .test-container, .cover-container { padding:20px 16px; } .cover-title { font-size:2.2rem; white-space:normal; } h1 { font-size:1.5rem; } .q-text { font-size:1.25rem; } .opt-desc { font-size:0.95rem; } .option-item { padding:14px 16px; } .type-images img { max-width:100px; } }
+    </style>
+</head>
+<body>
+
+<!-- 背景音乐 (使用新链接) -->
+<audio id="bgMusic" src="https://raw.githubusercontent.com/l-zzhi/l-zzhi.github.io/refs/heads/main/%E6%9D%8E%E6%99%9F%20-%20%E9%99%AA%E6%88%91%E5%8E%BB%E7%96%AF%E8%B7%91.mp3" loop preload="auto"></audio>
+
+<!-- 封面页 -->
+<div id="coverPage" class="cover-container">
+    <div class="cover-lsti">LSTI</div>
+    <div class="cover-title">晟斗士人格类型测试</div>
+    <div class="cover-subtitle">每一份喜欢 都有独特的形状</div>
+    <button class="cover-btn" id="startBtn">开始测试</button>
+    <div class="cover-footer">LSTI</div>
+</div>
+
+<!-- 主测试区 -->
+<div id="mainTest" class="test-container hidden">
+    <div class="title-row">
+        <h1> LSTI · 晟斗士 <small id="pageIndicator">1/25</small></h1>
+        <button class="music-toggle" id="musicToggle" title="音乐开关">🔇</button>
+    </div>
+    
+    <div id="quizSection">
+        <div class="progress-container">
+            <span class="progress-label" id="progressText">第1题</span>
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill" style="width: 4%;"></div>
+            </div>
+        </div>
+        <div id="questionArea" class="question-card"></div>
+        <div class="nav-row">
+            <button class="nav-btn" id="prevBtn" disabled>← 上一题</button>
+            <button class="nav-btn" id="nextBtn">下一题 →</button>
+        </div>
+        <div style="display: flex; justify-content: center; margin: 16px 0;">
+            <button class="nav-btn submit-btn" id="submitBtn" style="display: none;">🔮 查看你的晟斗士人格类型</button>
+        </div>
+        <div class="footer-progress">
+            <span class="progress-badge" id="bottomProgress">第 1 / 25 题</span>
+        </div>
+        <div class="page-footer-lsti">LSTI</div>
+    </div>
+
+    <div id="resultSection" class="result-panel" style="display: none;">
+        <div class="result-lsti">LSTI</div>
+        <div class="result-title" id="resultMainTitle">你的晟斗士人格类型</div>
+        <div class="chart-container">
+            <canvas id="resultChart" width="220" height="220"></canvas>
+        </div>
+        <div class="bar-chart-area" id="barChartArea"></div>
+        <div class="type-desc-box" id="typeDescriptions"></div>
+        <div class="save-btn-container">
+            <button class="save-btn" id="saveImageBtn">📸 保存图片</button>
+        </div>
+        <div class="disclaimer">测试内容仅供娱乐</div>
+    </div>
+    <div class="footer-note">LSTI · 每一份爱都有独特的形状</div>
+</div>
+
+<script>
+    (function(){
+        // ---------- 题库 ----------
+        const questions = [
+            { text: "刚结束疲惫的一天，你最想通过哪种方式“回血”？", options: [
+                { letter: "A", desc: "翻出李晟以前的舞台，舔颜并为李晟超好听的歌声超有魅力的舞台发疯。", tags: ["舞台粉","颜粉","歌手粉","颜粉"] },
+                { letter: "B", desc: "打开超话，看看今天超话更新的内容，签到点赞评论转发做做数据。", tags: ["数据粉","产出粉"] },
+                { letter: "C", desc: "打开各个软件看李晟今天有没有更新。", tags: ["物料粉","产出粉","颜粉"] },
+                { letter: "D", desc: "打开音乐软件，循环播放李晟的歌。", tags: ["歌手粉","舞台粉"] }
+            ]},
+            { text: "如果要向一个人不了解李晟的人安利她，你会首先选择哪一项？", options: [
+                { letter: "A", desc: "介绍某部剧里很有魅力的角色，精细的演技。", tags: ["安利粉","演员粉","颜粉"] },
+                { letter: "B", desc: "翻出某个采访里你觉得很有道理很哲学的话，让你从中学到/跟你一模一样的部分。", tags: ["访谈粉"] },
+                { letter: "C", desc: "令人着迷的颜值，女神好伟大的一张脸。", tags: ["颜粉","女友粉","颜粉"] },
+                { letter: "D", desc: "光彩四射的舞台，谁看谁爱上的满分爱豆。", tags: ["歌手粉","舞台粉"] }
+            ]},
+            { text: "晚上躺在床上刷手机，你最可能在干什么？", options: [
+                { letter: "A", desc: "凌晨零点抢超话首签，连签也不能断。", tags: ["数据粉"] },
+                { letter: "B", desc: "在各个软件寻找她的踪迹，到处搜索刷视频。", tags: ["颜粉","物料粉","颜粉"] },
+                { letter: "C", desc: "打开那部看了无数遍的剧继续第n遍观看。", tags: ["演员粉"] },
+                { letter: "D", desc: "听歌，好美妙动听悦耳的声音。", tags: ["歌手粉","舞台粉"] }
+            ]},
+            { text: "她的新剧终于播出了，你的状态是：", options: [
+                { letter: "A", desc: "疯狂截图她的绝美造型，发朋友圈发微博发给朋友猛夸。", tags: ["颜粉","安利粉","颜粉"] },
+                { letter: "B", desc: "专心投入剧情，等结束后马上发长篇剧评夸演技。", tags: ["演员粉"] },
+                { letter: "C", desc: "追剧进度完全靠刷社交平台，不打开播放器，专门在超话里存别人整理的高清cut和动图。", tags: ["物料粉","颜粉"] },
+                { letter: "D", desc: "对搭戏角色过敏，只要别的角色跟她有互动，就在屏幕前疯狂吃醋或代入。", tags: ["妈粉","女友粉"] }
+            ]},
+            { text: "如果她毫无预兆地突然发动态（微博抖音小红书等），你的第一反应是：", options: [
+                { letter: "A", desc: "疯狂点赞评论转发，立刻去评论区抢前排热评。", tags: ["安利粉","数据粉"] },
+                { letter: "B", desc: "赶紧点开大图，看看图文内容，夸赞美貌。", tags: ["颜粉","物料粉","颜粉"] },
+                { letter: "C", desc: "马上截图发给同担并疯狂尖叫。", tags: ["颜粉"] },
+                { letter: "D", desc: "仔细查看发表的文字或配文，开始逐字研究。", tags: ["产出粉","访谈粉"] }
+            ]},
+            { text: "她在工作（剧组综艺等）中遭遇了不公正的舆论抹黑，你会：", options: [
+                { letter: "A", desc: "迅速整理时间线和逻辑图，发长文替她澄清。", tags: ["安利粉","妈粉"] },
+                { letter: "B", desc: "组织粉丝群，有条不紊地带话题、控评、做数据。", tags: ["数据粉"] },
+                { letter: "C", desc: "气得睡不着觉，觉得全天下都在欺负我的宝贝。", tags: ["妈粉","女友粉"] },
+                { letter: "D", desc: "根本不跟黑粉废话，直接熟练地举报。", tags: ["数据粉"] }
+            ]},
+            { text: "她突然宣布要举办一场个人演唱会，你最期待的是：", options: [
+                { letter: "A", desc: "演唱会舞台上的顶级舞美。", tags: ["舞台粉","颜粉"] },
+                { letter: "B", desc: "全开麦的歌声加上音响对你耳朵造成的冲击。", tags: ["舞台粉","歌手粉"] },
+                { letter: "C", desc: "演唱会上美的让你尖叫的新造型。", tags: ["妈粉","颜粉","颜粉"] },
+                { letter: "D", desc: "一些能够触及你心底的talking。", tags: ["访谈粉"] }
+            ]},
+            { text: "如果你的手机壁纸是她，那张图具体是什么样的她？", options: [
+                { letter: "A", desc: "舞台上的她。", tags: ["舞台粉","歌手粉"] },
+                { letter: "B", desc: "生活中的她。", tags: ["颜粉","女友粉","颜粉"] },
+                { letter: "C", desc: "一套艺术图中的她。", tags: ["颜粉","数据粉"] },
+                { letter: "D", desc: "剧中的角色。", tags: ["演员粉"] }
+            ]},
+            { text: "你手机相册里关于她的内容，占比最多的是：", options: [
+                { letter: "A", desc: "各种活动的高清精修图和神级生图。", tags: ["颜粉","物料粉","颜粉"] },
+                { letter: "B", desc: "她的各种舞台的截图和动图。", tags: ["舞台粉","歌手粉"] },
+                { letter: "C", desc: "各种采访时的金句截图和表情包。", tags: ["访谈粉","安利粉"] },
+                { letter: "D", desc: "她日常生活中的随手拍和Vlog截图。", tags: ["物料粉","妈粉"] }
+            ]},
+            { text: "你的手机内存又双叒叕报警了，必须清理一些东西，你会怎么删？", options: [
+                { letter: "A", desc: "只保留最高清的生图和最绝的舞台直拍，糊图和旧物料全删。", tags: ["颜粉","舞台粉","颜粉"] },
+                { letter: "B", desc: "删掉那些单纯的风景照或静图，保留有情节的Vlog和访谈片段。", tags: ["访谈粉","演员粉"] },
+                { letter: "C", desc: "把日常听的她的歌转存到云盘，手机里只留现场live版。", tags: ["歌手粉","舞台粉"] },
+                { letter: "D", desc: "根本舍不得删！直接去换一个内存大的的新手机。", tags: ["物料粉","女友粉"] }
+            ]},
+            { text: "在所有关于她的“二创作品（同人产出）”中，哪种形式最轻易打动你的心？", options: [
+                { letter: "A", desc: "用她绝美的图片配上极具氛围感BGM的混剪视频。", tags: ["颜粉","安利粉","颜粉"] },
+                { letter: "B", desc: "把她不同时期的采访音频拼凑起来，剪辑成一段“心路历程”。", tags: ["访谈粉","产出粉"] },
+                { letter: "C", desc: "纯享版的舞台多机位切换混剪，展现舞台上的绝对实力与魅力。", tags: ["歌手粉","舞台粉"] },
+                { letter: "D", desc: "每一个剧中角色的混剪，每一个构成她一部分的碎片。", tags: ["演员粉","产出粉"] }
+            ]},
+            { text: "如果她要出一本自传或者个人写真书，你最希望里面包含什么内容？", options: [
+                { letter: "A", desc: "大量绝美未公开的高清照和时尚大片。", tags: ["颜粉","物料粉","颜粉"] },
+                { letter: "B", desc: "她亲笔写的内心独白和从业心路历程。", tags: ["访谈粉","演员粉"] },
+                { letter: "C", desc: "生活中的真实的她。", tags: ["物料粉","女友粉"] },
+                { letter: "D", desc: "详细记录她每一场经典舞台背后的排练日记。", tags: ["舞台粉","歌手粉"] }
+            ]},
+            { text: "你觉得她对你来说，别人最不可替代的属于她的一部分是什么？", options: [
+                { letter: "A", desc: "情绪的稳定剂。听到她开口唱歌的那个瞬间，世界就安静的只剩她的歌声。", tags: ["歌手粉","舞台粉"] },
+                { letter: "B", desc: "信仰的实体化。看着她一步一个脚印，这就是努力和坚持的意义。", tags: ["演员粉","舞台粉"] },
+                { letter: "C", desc: "灵感的来源。她的每一个眼神、每一场戏，每一个角色，都能唤醒你表达的欲望。", tags: ["舞台粉","演员粉","颜粉"] },
+                { letter: "D", desc: "伤痛的避难所。只要想到这个世界上有她的存在，就觉得所有痛都能被治愈。", tags: ["女友粉","妈粉"] }
+            ]},
+            { text: "当你遇到现实生活中的挫折时，你通常会想起怎么样的“她”来治愈自己？", options: [
+                { letter: "A", desc: "反复观看你最爱的几次现场，用磅礴的能量将负面情绪逐渐赶走。", tags: ["歌手粉","舞台粉"] },
+                { letter: "B", desc: "翻出她以前的采访，看她在日常生活中是如何调节自己情绪，面对生活的。", tags: ["访谈粉","演员粉"] },
+                { letter: "C", desc: "打开她的社交帐号，一条一条翻看她的动态来调节自己的情绪。", tags: ["数据粉","产出粉"] },
+                { letter: "D", desc: "脑海里回放她在某部剧中饰演的某个角色的台词，想起那个角色面对挫折是如果应对的。", tags: ["演员粉"] }
+            ]},
+            { text: "你觉得她最迷人的瞬间是在什么时候？", options: [
+                { letter: "A", desc: "聚光灯亮起，舞台中间那个掌控一切的她。", tags: ["舞台粉","歌手粉"] },
+                { letter: "B", desc: "采访时别人问她问题，她分析解剖问题，进行深度回答。", tags: ["访谈粉","演员粉"] },
+                { letter: "C", desc: "她完全沉浸在角色里，连眼神都变了的时候。", tags: ["演员粉","颜粉"] },
+                { letter: "D", desc: "只要她出现在我的视线里，每一秒都迷人。", tags: ["女友粉","颜粉","颜粉"] }
+            ]},
+            { text: "看到她多年前刚出道时的青涩影像，你的第一反应是？", options: [
+                { letter: "A", desc: "感慨她一路走来的成长与蜕变，更爱现在的她。", tags: ["演员粉","访谈粉"] },
+                { letter: "B", desc: "翻出从你认识她到现在保存的图片，原来你已经陪她走了这么久。", tags: ["妈粉","数据粉"] },
+                { letter: "C", desc: "考古素材+1，赶紧存下来剪进下一个混剪视频里。", tags: ["物料粉","产出粉"] },
+                { letter: "D", desc: "好想穿越回去保护那个小小的她，和她一路走下去。", tags: ["妈粉","物料粉"] }
+            ]},
+            { text: "如果可以和她一起度过一天，你会和她一起做什么？", options: [
+                { letter: "A", desc: "跟着她重游她记忆里最珍贵的地方，听她讲述她的过往。", tags: [] },
+                { letter: "B", desc: "带她去你成长生活的城市，向她介绍你生命中最重要的风景。", tags: [] },
+                { letter: "C", desc: "和她一起去她拍戏的片场，看她如何工作，如何赋予角色生命。", tags: [] },
+                { letter: "D", desc: "一起去海边看日出落日，再回到家里一起做饭、聊天、看电影。", tags: [] }
+            ]},
+            { text: "在你的世界里，你觉得“她”和“你”是什么关系？", options: [
+                { letter: "A", desc: "她是远方一位素未谋面却心意相通的朋友，总在你情绪低落的时刻恰好出现。", tags: [] },
+                { letter: "B", desc: "她是你的精神锚点，不管外界怎样，只要想起她的名字，内心便重归宁静。", tags: [] },
+                { letter: "C", desc: "她是你的一面镜子。你透过她的清醒与努力看到理想中的自己，并将她作为追随的方向。", tags: [] },
+                { letter: "D", desc: "她是远山的篝火，你是穿越荒野的旅人，只要望见那团光亮，便不再害怕迷路。", tags: [] }
+            ]},
+            { text: "回顾你追她的这段时光，你觉得你获得的最大收获是：", options: [
+                { letter: "A", desc: "认识了各种职业，天南海北的不同的朋友。", tags: ["数据粉","安利粉"] },
+                { letter: "B", desc: "学到了很多为人处世的哲理和清醒的价值观。", tags: ["访谈粉","演员粉"] },
+                { letter: "C", desc: "意外地开发了自己的画画/剪辑/写作技能。", tags: ["产出粉","舞台粉"] },
+                { letter: "D", desc: "找到了精神寄托，感觉她给了我一种陪伴的力量。", tags: ["女友粉","妈粉"] }
+            ]},
+            { text: "在硕大的宇宙中，你们都是各自航道上两颗独自运转的行星，却在浩瀚星河中有一刻的擦身和相遇。她想对于你的意义是什么？", options: [
+                { letter: "A", desc: "在偌大的宇宙里，你用你的爱为她建造了一片只有她能看见的星云，那是你们共同的秘密。", tags: ["女友粉","产出粉"] },
+                { letter: "B", desc: "很多个行星聚在一起，彼此辉映，让你们的光芒比独身的行星更加耀眼夺目。", tags: ["数据粉","安利粉"] },
+                { letter: "C", desc: "宇宙再大，也比不上她在你心里的份量大，比不上她对你产生的吸引力大，你不由自主地绕着她旋转。", tags: ["颜粉","物料粉","颜粉"] },
+                { letter: "D", desc: "她是你在茫茫宇宙中时时刻刻都会想起的人，像一颗永远不灭北极星，指引着你的方向。", tags: ["歌手粉","舞台粉"] }
+            ]},
+            { text: "如果让你用一句话概括你对她的感情，会是：", options: [
+                { letter: "A", desc: "她是你平淡生活里突然照进来的一束光，从此万物都有了颜色。", tags: ["女友粉","产出粉"] },
+                { letter: "B", desc: "看着她一路跌跌撞撞走到今天，就像看着自己亲手浇灌的花永远盛开。", tags: ["妈粉","数据粉"] },
+                { letter: "C", desc: "她是一个值得被全世界看见的演员，歌手，艺术家，而你很庆幸成为了她的观众。", tags: ["安利粉","演员粉"] },
+                { letter: "D", desc: "她像生活中一位从未谋面却无比懂我的知己，用作品陪我走过了漫长岁月。", tags: ["访谈粉","女友粉"] }
+            ]},
+            { text: "你觉得李晟好看吗", options: [
+                { letter: "A", desc: "这还用问？", tags: [] }, { letter: "B", desc: "这简直是女神。", tags: [] }, { letter: "C", desc: "好看。", tags: [] }, { letter: "D", desc: "超级好看。", tags: [] }
+            ]},
+            { text: "你爱李晟吗？", options: [{ letter: "A", desc: "爱。", tags: [] }] },
+            { text: "你会继续爱李晟吗", options: [{ letter: "A", desc: "会。", tags: [] }] },
+            { text: "陪李晟去疯跑。", options: [{ letter: "A", desc: "好。", tags: [] }] }
+        ];
+
+        // 图片库（文档最新）
+        const typeImages = {
+            "安利粉": ["https://i.ibb.co/27WDF0b8/1.jpg","https://i.ibb.co/mV69ftvH/2.png","https://i.ibb.co/kV4wcbMF/3.png"],
+            "产出粉": ["https://i.ibb.co/TDtL9S20/1.png","https://i.ibb.co/hNPD6Tx/2.png","https://i.ibb.co/Q7hwSjW7/3.png"],
+            "访谈粉": ["https://i.ibb.co/gZrx4DxG/1.png","https://i.ibb.co/NHpKQqK/2.jpg","https://i.ibb.co/4wWhhCY4/3.jpg"],
+            "歌手粉": ["https://i.ibb.co/tP3GXTv5/1.jpg","https://i.ibb.co/HDLFPHKp/2.png","https://i.ibb.co/5WtG56jx/3.jpg"],
+            "演员粉": ["https://i.ibb.co/39rVq8QN/1.png","https://i.ibb.co/XZkFPLP3/2.png","https://i.ibb.co/v41vQzc2/3.png"],
+            "妈粉": ["https://i.ibb.co/S4qHwVpv/1.png","https://i.ibb.co/GL4jpd6/2.png","https://i.ibb.co/JRtLTN9H/3.png"],
+            "女友粉": ["https://i.ibb.co/8n6mvFXr/1.png","https://i.ibb.co/dJMWJDVB/2.jpg","https://i.ibb.co/zTm86zDZ/3.png"],
+            "数据粉": ["https://i.ibb.co/1tztJZqK/1.jpg","https://i.ibb.co/XxrNxYjk/2.png","https://i.ibb.co/4wWKkpNW/3.png"],
+            "舞台粉": ["https://i.ibb.co/BVzrZXn6/1.png","https://i.ibb.co/JFQcR4xz/2.png","https://i.ibb.co/C5r23yYW/3.png"],
+            "物料粉": ["https://i.ibb.co/7xTjvmrh/1.png","https://i.ibb.co/qFDJMQy4/2.jpg","https://i.ibb.co/xt2J0ngQ/3.png"],
+            "颜粉": ["https://i.ibb.co/JjgVjxqt/1.png","https://i.ibb.co/5hRp9ZTb/2.png","https://i.ibb.co/6RQgZRc5/3.png"]
+        };
+
+        const typeDescriptions = {
+            "访谈粉": { name:" 访谈粉", desc:"你爱上的不只是她的外观，更是她脑子里那些闪闪发光的思想。你热衷于翻遍她所有的采访，逐字逐句地品读她对角色、对生活、对世界的理解。她的某句话可能曾在某个夜里精准地击中你，让你豁然开朗。你看懂了她的灵魂，你是她的精神共鸣者，隔着屏幕你们完成了一场又一场深度对话。" },
+            "颜粉": { name:" 颜粉", desc:"你是毫不掩饰的外貌协会终身会员。入坑的契机可能只是一张惊为天人的生图，从此便一发不可收拾。你对光影、妆造、构图有着天生的审美直觉，手机相册里存满了她的神图，关于她的图你每一张都保存。美，就是你追星的第一生产力。" },
+            "演员粉": { name:" 演员粉", desc:"她是一位优秀的演员，而你恰好能get到所有她在演技里隐藏的细节，你欣赏她的每一帧表演。你热衷于分析她的微表情、眼神变化、台词的重音和气息，为她的每一个高光时刻喝彩。她演活一个角色的时候，你比谁都骄傲。你相信最好的爱她的方式，就是坐在观众席里，安静地看她用角色说话，用作品证明自己。" },
+            "舞台粉": { name:" 舞台粉", desc:"聚光灯一亮起，她就是你心中的首席舞者。你沉迷于她的每一个舞台直拍，对走位、控场、表情管理和即兴发挥如数家珍。每一个精准的定点、每一个行云流水的动作，都能让你反复拉进度条品味。你的手机里存满了各个机位的舞台视频，各个舞台的炸场表演。台上，她引发全场躁动，而你永远是她最虔诚的信徒。" },
+            "歌手粉": { name:" 歌手粉", desc:"你疯狂的迷恋她的声音。无论是录音室版本还是现场live，她的音色就是治愈你一切的解药。你热衷于收集她各种翻唱、清唱和不修音片段，在通勤的路上、失眠的深夜里，戴上耳机，她的声音将你与世界分为两个境界，而你沉溺于她的歌声。你最爱的还是她最原始的音色。" },
+            "数据粉": { name:" 数据粉", desc:"你是最令人敬佩的数据王者。超话等级、微博转赞评，这些数字是你的核心KPI。你能熟练切换无数个小号，在凌晨零点准时蹲守首签。你擅长将最简单的数字变成爱她的直接证明。每一个漂亮的数据背后，都藏着你深夜亮着的手机屏幕和一颗不愿服输的心。" },
+            "妈粉": { name:" 妈粉", desc:"在她面前，你自动激活了母亲的角色。无论她在外面多么光芒万丈，在你眼里她永远是个需要被照顾的孩子。你关心她有没有好好吃饭、穿得够不够暖、有没有受伤、是不是又熬夜了。看到她的成就你会欣慰，看到她受累你会心疼到不行。你的爱里全都是沉甸甸的牵挂和“我好心疼”。" },
+            "女友粉": { name:" 女友粉", desc:"你的爱带着温柔的和浪漫的幻想色彩。你把她放在心里最柔软的位置，像收藏一颗会发光的星星。她笑你就跟着笑，她落泪你会心疼，她的每一份成就你都比自己得了奖还开心。你乐此不疲地在脑海里构建属于你们的平行宇宙，只要想到这个世界上有她存在，连呼吸都变得甜了起来。你希望她永远被爱意包围，自由地做她喜欢的事，成为她想成为的人。在这个世界上遇见她，是你最幸运的事。" },
+            "物料粉": { name:" 物料粉", desc:"你是档案馆馆长。从高清精修图到生图糊图，从官方花絮到粉丝偶遇的随手拍，从出道初期的青涩影像到最新鲜的机场路透，你一样都舍不得落下，你的手机和网盘里按日期、按活动分门别类地存满了她的各种物料。那些零碎的日常碎片拼在一起，就是你陪她走过的漫长岁月。你是时光的收藏家，用无数个瞬间，为她编织了一部最完整、最温柔的成长编年史。" },
+            "产出粉": { name:" 产出粉", desc:"你是最温柔的造梦者。别人用眼睛追星，你用的是笔尖、鼠标和无数个不眠的深夜，用才华把爱意转化为看得见的作品。为了卡一个剪辑点你可以反复看几百遍素材，为了画好一个眼神你可以熬到凌晨三点。你希望把心中那个美好的她分享给更多人。你用自己的方式，为她搭建了一座永远灯火通明的乌托邦，让更多人在你的作品里看见她的好、爱上她的光。" },
+            "安利粉": { name:" 安利粉", desc:"你的终极使命，是让全世界都知道她的好。朋友聚会时你三句不离她的名字，朋友圈和微博首页全是她的美图和直拍链接。你精心挑选她的舞台视频，配上热情洋溢的安利文案，像一个不知疲倦的人形种草机。你相信，她的光芒值得被更多人看见，在你孜孜不倦的安利下，你用自己的方式，让她的星光洒向更远的地方。" }
+        };
+
+        const totalQ = questions.length;
+        let currentIndex = 0;
+        let answers = new Array(totalQ).fill(null);
+        
+        const coverPage = document.getElementById('coverPage');
+        const mainTest = document.getElementById('mainTest');
+        const startBtn = document.getElementById('startBtn');
+        const quizSection = document.getElementById('quizSection');
+        const resultSection = document.getElementById('resultSection');
+        const questionArea = document.getElementById('questionArea');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const musicToggle = document.getElementById('musicToggle');
+        const pageIndicator = document.getElementById('pageIndicator');
+        const progressText = document.getElementById('progressText');
+        const progressFill = document.getElementById('progressFill');
+        const bottomProgress = document.getElementById('bottomProgress');
+        const saveImageBtn = document.getElementById('saveImageBtn');
+        const bgMusic = document.getElementById('bgMusic');
+
+        let isAutoJumping = false;
+        let musicPlaying = false;
+
+        // 自动播放音乐（打开页面即尝试）
+        function tryAutoPlay() {
+            bgMusic.play().then(() => {
+                musicPlaying = true;
+                musicToggle.textContent = '🔊';
+                musicToggle.classList.remove('off');
+            }).catch(() => {
+                musicToggle.textContent = '🔇';
+                musicToggle.classList.add('off');
+                // 等待用户首次交互
+                const resumeOnce = () => {
+                    if (!musicPlaying) {
+                        bgMusic.play().then(() => {
+                            musicPlaying = true;
+                            musicToggle.textContent = '🔊';
+                            musicToggle.classList.remove('off');
+                        }).catch(()=>{});
+                    }
+                    document.removeEventListener('click', resumeOnce);
+                    document.removeEventListener('touchstart', resumeOnce);
+                };
+                document.addEventListener('click', resumeOnce);
+                document.addEventListener('touchstart', resumeOnce);
+            });
         }
-        body {
-            background-image: url('https://s41.ax1x.com/2026/04/21/peg5TqU.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-color: #fad4e4;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
+        tryAutoPlay();
+
+        // 音乐开关
+        musicToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (musicPlaying) {
+                bgMusic.pause();
+                musicToggle.textContent = '🔇';
+                musicToggle.classList.add('off');
+                musicPlaying = false;
+            } else {
+                bgMusic.play().then(() => {
+                    musicToggle.textContent = '🔊';
+                    musicToggle.classList.remove('off');
+                    musicPlaying = true;
+                }).catch(()=>{});
+            }
+        });
+
+        function showLightbox(imgSrc) {
+            const lightbox = document.createElement('div');
+            lightbox.className = 'lightbox';
+            const img = document.createElement('img');
+            img.src = imgSrc;
+            lightbox.appendChild(img);
+            document.body.appendChild(lightbox);
+            lightbox.addEventListener('click', () => document.body.removeChild(lightbox));
         }
-        .lightbox {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            cursor: zoom-out;
+        window.showLightbox = showLightbox;
+
+        function startTest() {
+            coverPage.classList.add('hidden');
+            mainTest.classList.remove('hidden');
+            renderQuestion(0);
+            // 确保音乐播放
+            if (!musicPlaying) {
+                bgMusic.play().then(() => {
+                    musicPlaying = true;
+                    musicToggle.textContent = '🔊';
+                    musicToggle.classList.remove('off');
+                }).catch(()=>{});
+            }
         }
-        .lightbox img {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            border: 3px solid white;
-            object-fit: contain;
+        startBtn.addEventListener('click', startTest);
+
+        function renderQuestion(index) {
+            const q = questions[index];
+            const selected = answers[index];
+            let html = `<div class="q-header"><span class="q-num-badge">${index+1}</span><div class="q-text">${q.text}</div></div><div class="options-list">`;
+            q.options.forEach((opt, optIdx) => {
+                const isChecked = (selected && selected.letter === opt.letter);
+                html += `<label class="option-item ${isChecked ? 'selected' : ''}">
+                    <input type="radio" name="question" value="${opt.letter}" data-opt-index="${optIdx}" ${isChecked ? 'checked' : ''}>
+                    <span class="opt-letter">${opt.letter}</span>
+                    <span class="opt-desc">${opt.desc}</span>
+                </label>`;
+            });
+            html += `</div>`;
+            questionArea.innerHTML = html;
+            document.querySelectorAll('input[name="question"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const optIndex = e.target.dataset.optIndex;
+                    answers[currentIndex] = questions[currentIndex].options[optIndex];
+                    document.querySelectorAll('.option-item').forEach(item => {
+                        const inp = item.querySelector('input');
+                        if (inp && inp.checked) item.classList.add('selected');
+                        else item.classList.remove('selected');
+                    });
+                    updateNavAndProgress();
+                    if (currentIndex < totalQ - 1 && !isAutoJumping) {
+                        isAutoJumping = true;
+                        setTimeout(() => {
+                            goToPage(currentIndex + 1);
+                            isAutoJumping = false;
+                        }, 200);
+                    }
+                });
+            });
+            updateNavAndProgress();
         }
 
-        /* 封面 */
-        .cover-container {
-            max-width: 680px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 40px;
-            padding: 35px 25px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 480px;
-            text-align: center;
-            border: 1px solid rgba(255, 220, 230, 0.5);
-            box-shadow: 0 10px 25px -8px rgba(180, 80, 120, 0.15);
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
+        function updateNavAndProgress() {
+            const cur = currentIndex + 1;
+            pageIndicator.innerText = `${cur}/${totalQ}`;
+            progressText.innerText = `第${cur}题`;
+            progressFill.style.width = `${(cur / totalQ) * 100}%`;
+            bottomProgress.innerText = `第 ${cur} / ${totalQ} 题`;
+            prevBtn.disabled = (currentIndex === 0);
+            const isLast = (currentIndex === totalQ - 1);
+            nextBtn.style.display = isLast ? 'none' : 'inline-block';
+            submitBtn.style.display = isLast ? 'inline-block' : 'none';
         }
-        .cover-lsti {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #b95c7c;
-            letter-spacing: 8px;
-            margin-bottom: 10px;
+
+        function goToPage(newIdx) {
+            if (newIdx < 0 || newIdx >= totalQ) return;
+            currentIndex = newIdx;
+            renderQuestion(currentIndex);
         }
-        .cover-title {
-            font-family: 'YouYuan', '幼圆', 'Segoe UI', sans-serif;
-            font-size: 3rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #d45c86 0%, #b34e6e 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 2px 2px 10px rgba(210, 80, 120, 0.25);
-            margin-bottom: 15px;
-            letter-spacing: 2px;
-            line-height: 1.2;
-            white-space: nowrap;
+
+        function calculateScores() {
+            const map = new Map();
+            const scoringIndices = [...Array(16).keys(), 18, 19, 20];
+            scoringIndices.forEach(i => {
+                const ans = answers[i];
+                if (ans && ans.tags) {
+                    ans.tags.forEach(tag => map.set(tag, (map.get(tag) || 0) + 1));
+                }
+            });
+            return Array.from(map.entries()).sort((a,b) => b[1]-a[1]);
         }
-        .cover-subtitle {
-            font-size: 1.1rem;
-            color: #b34e6e;
-            margin-bottom: 35px;
-            font-weight: 500;
-            letter-spacing: 2px;
-            opacity: 0.9;
-            border-top: 1.5px solid rgba(210, 80, 120, 0.5);
-            border-bottom: 1.5px solid rgba(210, 80, 120, 0.5);
-            padding: 10px 25px;
-            display: inline-block;
+
+        function drawPieChart(topTags) {
+            const canvas = document.getElementById('resultChart');
+            const ctx = canvas.getContext('2d');
+            const total = topTags.reduce((s, t) => s + t[1], 0);
+            const colors = ['#d45c86', '#e8749a', '#f6a5c1'];
+            let start = -Math.PI/2;
+            ctx.clearRect(0,0,220,220);
+            topTags.forEach((tag, i) => {
+                const angle = (tag[1]/total) * 2 * Math.PI;
+                ctx.beginPath();
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.moveTo(110,110);
+                ctx.arc(110,110,90, start, start+angle);
+                ctx.closePath();
+                ctx.fill();
+                start += angle;
+            });
+            ctx.beginPath();
+            ctx.fillStyle = '#fff0f5';
+            ctx.arc(110,110,48,0,2*Math.PI);
+            ctx.fill();
         }
-        .cover-btn {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
-            border: 2px solid #e8749a;
-            color: #a13b63;
-            font-size: 1.5rem;
-            font-weight: 700
+
+        function renderBarChart(top3) {
+            const total = top3.reduce((s, t) => s + t[1], 0);
+            const colors = ['#d45c86', '#e8749a', '#f6a5c1'];
+            const barArea = document.getElementById('barChartArea');
+            barArea.innerHTML = top3.map((tag, i) => {
+                const percent = (tag[1] / total) * 100;
+                return `<div class="bar-item">
+                    <span class="bar-label">${tag[0]}</span>
+                    <div class="bar-bg"><div class="bar-fill" style="width:${percent}%; background:${colors[i]};"></div></div>
+                    <span class="bar-percent">${percent.toFixed(1)}%</span>
+                </div>`;
+            }).join('');
+        }
+
+        function showResult() {
+            if (answers.some((a,i) => (i<16 || i===18||i===19||i===20) && a === null)) {
+                alert('请完成所有题目后再查看结果～');
+                const idx = answers.findIndex((a,i) => (i<16||i===18||i===19||i===20) && a === null);
+                if (idx !== -1) goToPage(idx);
+                return;
+            }
+            const sorted = calculateScores();
+            const top3 = sorted.slice(0,3);
+            drawPieChart(top3);
+            renderBarChart(top3);
+            
+            const descBox = document.getElementById('typeDescriptions');
+            descBox.innerHTML = top3.map(t => {
+                const info = typeDescriptions[t[0]] || { name:t[0], desc:"每一种喜欢都独一无二。" };
+                const images = typeImages[t[0]] || [];
+                const imgHtml = images.length ? `<div class="type-images">${images.map(url => `<img src="${url}" alt="${t[0]}" crossorigin="anonymous" onclick="showLightbox('${url}')">`).join('')}</div>` : '';
+                return `<div class="type-card"><div class="type-name">${info.name}</div><div class="type-desc">${info.desc}</div>${imgHtml}</div>`;
+            }).join('');
+            
+            quizSection.style.display = 'none';
+            resultSection.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function saveAsImage() {
+            const element = document.getElementById('resultSection');
+            html2canvas(element, { scale: 2, backgroundColor: null, allowTaint: false, useCORS: true, logging: false }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'LSTI_晟斗士人格类型.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).catch(err => { alert('保存失败，可稍后重试。'); });
+        }
+
+        saveImageBtn.addEventListener('click', saveAsImage);
+        prevBtn.addEventListener('click', () => { if (currentIndex>0) goToPage(currentIndex-1); });
+        nextBtn.addEventListener('click', () => { if (currentIndex<totalQ-1) goToPage(currentIndex+1); });
+        submitBtn.addEventListener('click', showResult);
+    })();
+</script>
+</body>
+</html>
